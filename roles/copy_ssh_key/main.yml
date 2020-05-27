@@ -1,0 +1,8 @@
+---
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key:  "{{ item.key }}"
+
+- name: Copy ssh public key to server
