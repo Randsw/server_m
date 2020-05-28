@@ -1,11 +1,18 @@
+- hosts: prod_server
+  tasks:
+    - include_role:
+        name: copy_ssh_key
 
 
- name: copy pub key to authorized_keys
-  copy:
-    src: "/home/{{ item.username }}/.ssh/id_rsa.pub"
-    dest: "/home/{{ item.username }}/.ssh/authorized_keys"
-    user: "{{ item.username }}"
-    group: "{{ item.username }}"
-    mode: "0644"
-    remote_src: True
-  with_items: "{{ users }}"
+
+
+ #name: copy pub key to authorized_keys
+  #copy:
+  #  src: "/home/{{ item.username }}/.ssh/id_rsa.pub"
+  #  dest: "/home/{{ item.username }}/.ssh/authorized_keys"
+  #  user: "{{ item.username }}"
+  #  group: "{{ item.username }}"
+  #  mode: "0644"
+  #  remote_src: True
+  #with_items: "{{ users }}"
+ # 

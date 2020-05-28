@@ -1,7 +1,6 @@
----
 ssh_users:
-  - name: dep7admin
-    key: "{{ lookup('file', 'roles/copy_ssh_key/files/.pub') }}" 
+    name: dep7admin
+    key: "{{ lookup('file', 'roles/copy_ssh_key/files/dep7server_m.pub') }}" 
     servers: 
-      - dep7server
+      - prod_server
     state: present
