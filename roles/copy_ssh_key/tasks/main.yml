@@ -1,7 +1,4 @@
 ---
-- name: Debug
-  debug:
-    msg: "{{ ssh_users }}"
 - name: Copy ssh public key to server
   authorized_key:
     user: "{{ item.name }}"
