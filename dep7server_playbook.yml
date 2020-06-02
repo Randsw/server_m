@@ -1,5 +1,13 @@
-- hosts: prod_server
+- hosts: dep7server
+  become: yes
+
+  vars_files:
+    - ~/VSCode/ansible/dep7server_m/dep7server_vault.yml 
+  vars:
+    ansible_become_pass: '{{ dep7server_password }}'
+
   roles:
     - copy_ssh_key
     - set_up_server
     - geerlingguy.docker
+    - set_up_dhcp

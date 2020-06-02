@@ -1,0 +1,14 @@
+def_lease_time: "600"
+max_lease_time: 7200
+subnet: 192.168.1.0
+subnet_net_mask: 255.255.255.0
+start_address: 192.168.1.110
+end_address: 192.168.1.220
+router_address: 192.168.1.1
+dns_address: 192.168.1.1
+
+#ssh config
+sshd_use_pam: "no"
+sshd_password_authentication: "no"
+sshd_challenge_response_authentication: "no"
+sshd_permitroot_login: "no"

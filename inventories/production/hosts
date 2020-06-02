@@ -1,9 +1,0 @@
-[prod_server]
-dep7server ansible_host=192.168.1.245 ansible_user=dep7admin ansible_ssh_private_key=~/.ssh/dep7server_m
-
-[prod_server:vars]
-sshd_use_pam=no
-sshd_password_authentication=no
-sshd_challenge_response_authentication=no
-sshd_permitroot_login=no
-

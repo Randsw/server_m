@@ -1,0 +1,45 @@
+---
+- name: Load distro-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "{{ default }}.yml"
+  tags: dhcp
+
+- include_tasks: default-fix.yml
+  when: ansible_os_family == 'Debian'
+  tags: dhcp
+
+- name: Set config directory perms
+  file:
+    path: "{{ dhcp_config | dirname }}"
+    state: directory
+    mode: '0755'
+  tags: dhcp
+
+- name: Add dhcp user to sudoers file
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^dhcpd'
+    line: 'dhcpd ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Configure dhcp server
+  template:
+    src: dhcp_setup.j2
+    dest: "{{ dhcp_config }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  notify: restart dhcp
+  tags: dhcp
+
+- name: "Ensure service is {{ dhcp_global_server_state | default('started') }}"
+  service:
+    name: "{{ dhcp_service }}"
+    state: "{{ dhcp_global_server_state | default('started') }}"
+    enabled: true
+  tags: dhcp
+

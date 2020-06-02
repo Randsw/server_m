@@ -1,0 +1,10 @@
+#
+# Subnet declarations
+#
+subnet {{ subnet }} netmask {{ subnet_net_mask }} {
+default-lease-time {{ def_lease_time }};
+max-lease-time {{ max_lease_time }};
+range {{ start_address }} {{ end_address }};
+option routers {{ router_address }};
+option domain-name-servers {{ dns_address}};
+}
