@@ -5,3 +5,21 @@ dhcp_config_dir: /etc/dhcp
 dhcp_config: /etc/dhcp/dhcpd.conf
 
 dhcp_service: isc-dhcp-server
+
+def_lease_time: "600"
+max_lease_time: 7200
+#Prod values
+#subnet: 192.168.1.0
+#subnet_net_mask: 255.255.255.0
+#start_address: 192.168.1.110
+#end_address: 192.168.1.220
+#router_address: 192.168.1.1
+#dns_address: 192.168.1.1
+
+#for molecule test
+subnet: 172.17.0.0
+subnet_net_mask: 255.255.0.0
+start_address: 172.17.0.110
+end_address: 172.17.0.220
+router_address: 172.17.0.1
+dns_address: 172.17.0.2

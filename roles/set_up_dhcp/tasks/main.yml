@@ -7,6 +7,11 @@
     - "{{ default }}.yml"
   tags: dhcp
 
+- name: Install dhcp server
+  apt:
+    pkg:
+      - isc-dhcp-server
+
 - include_tasks: default-fix.yml
   when: ansible_os_family == 'Debian'
   tags: dhcp
@@ -17,13 +22,6 @@
     state: directory
     mode: '0755'
   tags: dhcp
-
-#- name: adding existing user dhcp to group sudo, dep7admin
-#  user:
-#    name: dhcpd
-#    groups: dhcpd,dep7admin
-#    append: yes
-
 
 - name: Configure dhcp server
   template:
@@ -36,10 +34,9 @@
   notify: restart dhcp
   tags: dhcp
 
-- name: "Ensure service is {{ dhcp_global_server_state | default('started') }}"
-  service:
-    name: "{{ dhcp_service }}"
-    state: "{{ dhcp_global_server_state | default('started') }}"
-    enabled: true
-  tags: dhcp
-
+#- name: "Ensure service is {{ dhcp_global_server_state | default('started') }}"
+#  service:
+#    name: "{{ dhcp_service }}"
+#    state: "{{ dhcp_global_server_state | default('started') }}"
+#    enabled: true
+#  tags: dhcp

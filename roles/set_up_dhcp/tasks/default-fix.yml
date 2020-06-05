@@ -1,7 +1,6 @@
 # This playbook adjusts a required dhcp package "default" file,
 # specific to debian-like installs
 ---
-
 - name: Defaults fix | Set a default listening interface
   lineinfile:
     dest: /etc/default/isc-dhcp-server
