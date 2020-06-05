@@ -1,1 +1,1 @@
-Automatic server initialisation
+Automatic server initialization

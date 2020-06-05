@@ -5,9 +5,9 @@
     state: present
     manage_dir: yes
     key: "{{ item.key }}"
-  with_items: 
-    - "{{ ssh_users }}"  
-    
+  with_items:
+    - "{{ ssh_users }}"
+
 - name: Configure ssh server
   template:
     src: ssh-setup.j2
@@ -16,7 +16,4 @@
     mode: '0600'
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
-- name: restart sshd
-  service:
-    name: sshd
-    state: restarted
+  notify: restart ssh

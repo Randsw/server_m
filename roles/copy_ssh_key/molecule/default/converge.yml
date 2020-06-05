@@ -1,0 +1,56 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=yes cache_valid_time=600
+      when: ansible_os_family == 'Debian'
+
+    - name: Wait for systemd to complete initialization.  # noqa 303
+      command: systemctl is-system-running
+      register: systemctl_status
+      until: >
+        'running' in systemctl_status.stdout or
+        'degraded' in systemctl_status.stdout
+      retries: 30
+      delay: 5
+      when: ansible_service_mgr == 'systemd'
+      changed_when: false
+      failed_when: systemctl_status.rc > 1
+
+    - name: Make sure we have a 'dep7admin' group
+      group:
+        name: dep7admin
+        state: present
+
+    - name: Allow 'dep7admin' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%dep7admin'
+        line: '%dep7admin ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: Add sudoers users to dep7admin group
+      user:
+        name: dep7admin
+        groups: dep7admin
+        append: yes
+        state: present
+        createhome: yes
+
+    - name: Install open-ssh server
+      apt:
+        pkg:
+          - openssh-server
+
+    - name: start and enable service
+      service:
+        name: ssh
+        state: "{{ service_default_state | default('started') }}"
+        enabled: "{{ service_default_enabled | default(true) | bool }}"
+
+  roles:
+    - role: copy_ssh_key
