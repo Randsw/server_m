@@ -1,0 +1,8 @@
+---
+- name: restart vsftpd
+  service:
+    name: "{{ vsftpd_service }}"
+    state: "{{ (vsftpd_global_server_state
+                | default('started') == 'started')
+                | ternary('restarted', 'stopped') }}"
+    enabled: true

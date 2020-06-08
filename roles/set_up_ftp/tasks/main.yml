@@ -1,0 +1,55 @@
+---
+- name: Install vsftpd server
+  apt:
+    pkg:
+      - vsftpd
+  tags: ftp
+
+- name: Configure vsftpd server
+  template:
+    src: ftp_config.j2
+    dest: "{{ vsftpd_config }}"
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  notify: restart vsftpd
+  tags: ftp
+
+- name: Create ftp_users group
+  group:
+    name: ftp_users
+    state: present
+  tags: ftp
+
+- name: Add the 7-2 users
+  user:
+    name: "{{ item }}"
+    shell: /usr/bin/false
+    group: ftp_users
+    #groups: ''
+    home: /mnt/hgfs/IO
+    state: present
+  loop: "{{ dep2_user_list }}"
+  tags: ftp
+
+- name: Create other users
+  user:
+    name: "{{ item }}"
+    shell: /usr/bin/false
+    group: ftp_users
+    #groups: ''
+    home: /mnt/hgfs/IO
+    state: present
+  loop: "{{ other_user_list }}"
+  tags: ftp
+
+- name: Create KavUpdate user
+  user:
+    name: KavUpdate
+    shell: /usr/bin/false
+    group: ftp_users
+    #groups: ''
+    home: /mnt/hgfs/IO
+    state: present
+  tags: ftp

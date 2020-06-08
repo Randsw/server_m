@@ -1,0 +1,13 @@
+dep2_user_list: [Rand, chistov, Bychkov, Chernov, 
+                 Chernyshova, Dmitriev, Kuritsyn, 
+                 Lantsov, Makhaev_A, Shevtsev
+                 Dolotkazina]
+
+other_user_list: [Ann, Antonovich, Pavel, solovyev
+                  Emelyanov, DSBobrus, Alimov, dep4
+                  klimov, Petr, Shutov]
+
+Kav_user : KavUpdate
+
+
+vsftpd_config: /etc/vsftpd.conf
