@@ -1,11 +1,11 @@
 ---
-- name: Load distro-specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "{{ default }}.yml"
-  tags: dhcp
+#- name: Load distro-specific variables
+#  include_vars: "{{ item }}"
+#  with_first_found:
+#    - "{{ ansible_distribution }}.yml"
+#    - "{{ ansible_os_family }}.yml"
+#    - "{{ default }}.yml"
+#  tags: dhcp
 
 - name: Install dhcp server
   apt:

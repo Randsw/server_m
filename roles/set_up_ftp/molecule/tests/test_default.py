@@ -21,5 +21,5 @@ def test_ftp_users(host):
              'Petr', 'Shutov', 'KavUpdate']
     assert ftp_conf.exists
     assert ftp_user.contains('ftp_users')
-    for user in users
-    assert ftp_user.contains(user)
+    for user in users:
+        assert ftp_user.contains(user)
