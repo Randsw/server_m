@@ -1,2 +1,18 @@
 ---
 vsftpd_config: /etc/vsftpd.conf
+
+chroot_local_user: 'YES'
+ssl_enable: 'YES'
+
+pasv_min_port: 50000
+pasv_max_port: 60000
+
+allow_writeable_chroot: 'YES'
+
+anonymous_enable: 'NO'
+
+vsftpd_service: vsftpd
+
+rsa_private_key_file: '/etc/ssl/private/ssl-cert-snakeoil.key'
+
+rsa_cert_file: '/etc/ssl/certs/ssl-cert-snakeoil.pem'

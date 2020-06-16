@@ -1,0 +1,51 @@
+---
+- name: Install netplan
+  apt:
+    name: "{{ netplan_packages }}"
+    state: present
+  become: true
+  register: result
+  until: result is successful
+
+- name: Capturing Existing Configurations
+  find:
+    paths: ["/etc/netplan"]
+    patterns: "*.yml,*.yaml"
+  register: _netplan_configs
+
+- name: Print existing config
+  debug: var=netplan_configs
+  when: debug is defined and ( debug | bool )
+
+- name: Removing Existing Configurations
+  file:
+    path: "{{ item['path'] }}"
+    state: absent
+  become: true
+  with_items: "{{ _netplan_configs['files'] }}"
+  when:
+    - item['path'] != netplan_config_file
+    - netplan_configuration != []
+
+
+- name: Configuring netplan
+  template:
+    src: config.yaml.j2
+    dest: "{{ netplan_config_file }}"
+  become: true
+  when: netplan_configuration != []
+  notify: netplan generate config
+
+- name: read the passwd file
+  shell: cat /etc/netplan/config.yaml
+  register: network_config
+  changed_when: false
+
+- name: Set corect ethernet interface name
+  lineinfile:
+    path: /etc/netplan/config.yaml
+    regexp: 'eth0:'
+    line: "      {{ item }}:"
+  when: item not in network_config.stdout
+  with_items: "{{ ansible_default_ipv4.alias }}"
+  #when: network_config.stdout.find(ansible_default_ipv4.alias) == -1

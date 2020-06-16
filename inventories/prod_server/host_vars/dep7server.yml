@@ -12,3 +12,18 @@ sshd_use_pam: "no"
 sshd_password_authentication: "no"
 sshd_challenge_response_authentication: "no"
 sshd_permitroot_login: "no"
+#ftp ssl cert
+rsa_cert_file: "/etc/ssl/certs/vsftpd.pem"
+rsa_private_key_file: '/etc/ssl/private/ssl-cert-snakeoil.key'
+
+netplan_configuration:
+    network:
+        version: 2
+        ethernets:
+            eth0:
+                dhcp4: no
+                dhcp6: no
+                addresses: ["192.168.1.246/16"]
+                gateway4: '192.168.1.1'
+                nameservers:
+                    addresses: ["192.168.1.1"]

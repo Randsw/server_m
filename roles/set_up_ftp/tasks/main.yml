@@ -5,6 +5,14 @@
       - vsftpd
   tags: ftp
 
+- name: Copy file with owner and permissions
+  copy:
+    src: vsftpd.pem
+    dest: /etc/ssl/certs
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Configure vsftpd server
   template:
     src: ftp_config.j2
@@ -27,7 +35,7 @@
     name: "{{ item }}"
     shell: /usr/bin/false
     group: ftp_users
-    #groups: ''
+    groups: ftp_users
     home: /mnt/hgfs/IO
     state: present
   loop: "{{ dep2_user_list }}"
@@ -38,7 +46,7 @@
     name: "{{ item }}"
     shell: /usr/bin/false
     group: ftp_users
-    #groups: ''
+    groups: ftp_users
     home: /mnt/hgfs/IO
     state: present
   loop: "{{ other_user_list }}"
@@ -49,7 +57,7 @@
     name: KavUpdate
     shell: /usr/bin/false
     group: ftp_users
-    #groups: ''
+    groups: ftp_users
     home: /mnt/hgfs/IO
     state: present
   tags: ftp

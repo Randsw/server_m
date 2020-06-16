@@ -33,5 +33,3 @@
     backup: yes
   notify: restart dhcp
   tags: dhcp
-
-

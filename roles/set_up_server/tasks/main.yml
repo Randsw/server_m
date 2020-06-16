@@ -6,8 +6,8 @@
 - name: Install a list of packages
   apt:
     pkg:
-     - mc
-     - ncdu
-     - nload
-     - git
-     - htop
+      - mc
+      - ncdu
+      - nload
+      - git
+      - htop
