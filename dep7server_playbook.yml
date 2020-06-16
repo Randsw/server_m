@@ -11,3 +11,4 @@
     - set_up_server
     - geerlingguy.docker
     - set_up_dhcp
+    - geerlingguy.firewall
