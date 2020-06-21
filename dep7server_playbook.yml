@@ -8,6 +8,7 @@
 
   roles:
     - set_up_network
+    - geerlingguy.firewall
     - copy_ssh_key
     - set_up_server
     - geerlingguy.docker

@@ -37,7 +37,7 @@
   notify: netplan generate config
 
 - name: read the passwd file
-  shell: cat /etc/netplan/config.yaml
+  command: cat /etc/netplan/config.yaml
   register: network_config
   changed_when: false
 
@@ -48,4 +48,3 @@
     line: "      {{ item }}:"
   when: item not in network_config.stdout
   with_items: "{{ ansible_default_ipv4.alias }}"
-  #when: network_config.stdout.find(ansible_default_ipv4.alias) == -1

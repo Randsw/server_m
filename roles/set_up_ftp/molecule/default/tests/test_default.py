@@ -26,3 +26,6 @@ def test_ftp_users(host):
     assert ftp_user.contains('ftp_users')
     for user in users:
         assert ftp_user.contains(user)
+
+def test_net_services_work(host):
+    assert host.socket("tcp://0.0.0.0:21").is_listening

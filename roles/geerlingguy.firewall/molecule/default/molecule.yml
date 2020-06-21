@@ -33,3 +33,7 @@ scenario:
     - side_effect
     - verify
     - destroy
+verifier:
+  name: testinfra
+  lint:
+    name: flake8

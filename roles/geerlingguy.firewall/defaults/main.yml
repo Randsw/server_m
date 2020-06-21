@@ -5,31 +5,29 @@ firewall_enabled_at_boot: true
 firewall_flush_rules_and_chains: true
 
 firewall_allowed_tcp_ports:
-  - "22" #ssh
-  - "25" #smtp
-  - "80" #http
-  - "443" #https
-firewall_allowed_udp_ports: 
-  - "53" #dns
+  - "22"   # ssh
+  - "25"   # smtp
+  - "80"   # http
+  - "443"  # https
+firewall_allowed_udp_ports:
+  - "53"   # dns
 firewall_forwarded_tcp_ports: []
 firewall_forwarded_udp_ports: []
 firewall_additional_rules:
-  # Passive ftp input rule
-  - "iptables -A INPUT -p tcp -m tcp --dport 20 -m conntrack \
-     --ctstate NEW,ESTABLISHED -j ACCEPT"
-  - "iptables -A INPUT -p tcp -m tcp --dport 21 -m conntrack \
-     --ctstate NEW,ESTABLISHED -j ACCEPT"
-  - "iptables -A INPUT -p tcp -m tcp --sport 1024:65535 --dport \
-     20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT"
-  - "iptables -A -p tcp -m state --state ESTABLISHED -j ACCEPT"
-  # Passive ftp output rules
-  - "iptables -A OUTPUT -p tcp -m tcp --dport 20 -m conntrack \
-     --ctstate NEW,ESTABLISHED -j ACCEPT"
-  - "iptables -A OUTPUT -p tcp -m tcp --dport 21 -m conntrack \
-     --ctstate NEW,ESTABLISHED -j ACCEPT"
-  - "iptables -A OUTPUT -p tcp -m tcp --sport 1024:65535 --dport \
-     20:65535 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT"
+   # Allow FTP connections @ port 21
+  - "iptables -A INPUT  -p tcp -m tcp --dport 21 -m conntrack --ctstate ESTABLISHED,NEW -j ACCEPT"
+  - "iptables -A OUTPUT -p tcp -m tcp --dport 21 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT"
+    # Allow FTP connections @ port 21
+  - iptables -A INPUT  -p tcp -m tcp --dport 20 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  - iptables -A OUTPUT -p tcp -m tcp --dport 20 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+    # Allow passive ftp connetions
+  - "iptables -A INPUT  -p tcp -m tcp --sport 50000:60000 --dport 50000:60000 -m conntrack --ctstate ESTABLISHED -j ACCEPT"
+  - "iptables -A OUTPUT -p tcp -m tcp --sport 50000:60000 --dport 50000:60000 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
 
+   # More simple way, need to load modprobe ip_conntrack_ftp
+   #- "iptables -A PREROUTING -t raw -p tcp --dport 21 -j CT --helper ftp"
+   #- "iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
+   #- "iptables -A INPUT -p tcp -m tcp --dport 21 -j ACCEPT"
 
 firewall_enable_ipv6: true
 firewall_ip6_additional_rules: []
