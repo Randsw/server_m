@@ -33,7 +33,7 @@
 - name: Add the 7-2 users
   user:
     name: "{{ item }}"
-    shell: /usr/bin/false
+    shell: /bin/false
     group: ftp_users
     groups: ftp_users
     home: /mnt/hgfs/IO
@@ -44,10 +44,10 @@
 - name: Create other users
   user:
     name: "{{ item }}"
-    shell: /usr/bin/false
+    shell: /bin/false
     group: ftp_users
     groups: ftp_users
-    home: /mnt/hgfs/IO
+    home: /mnt/hgfs/IO/Public
     state: present
   loop: "{{ other_user_list }}"
   tags: ftp
@@ -55,9 +55,34 @@
 - name: Create KavUpdate user
   user:
     name: KavUpdate
-    shell: /usr/bin/false
+    shell: /bin/false
     group: ftp_users
     groups: ftp_users
     home: /mnt/hgfs/IO
     state: present
   tags: ftp
+
+- name: Add "false" shell to /etc/shells
+  lineinfile:
+    path: /etc/shells
+    regexp: '^'
+    line: '/bin/false'
+    state: present
+
+- name: Create a 'dir2' ftp directory if it does not exist
+  file:
+    path: /mnt/hgfs/IO
+    state: directory
+    owner: root
+    group: root
+    mode: '0777'
+    recurse: yes
+
+- name: Create a 'public' ftp directory if it does not exist
+  file:
+    path: /mnt/hgfs/IO/Public
+    state: directory
+    owner: root
+    group: root
+    mode: '0777'
+    recurse: yes

@@ -14,7 +14,7 @@ sshd_challenge_response_authentication: "no"
 sshd_permitroot_login: "no"
 #ftp ssl cert
 rsa_cert_file: "/etc/ssl/certs/vsftpd.pem"
-rsa_private_key_file: '/etc/ssl/private/ssl-cert-snakeoil.key'
+rsa_private_key_file: "/etc/ssl/certs/vsftpd.pem"
 
 netplan_configuration:
     network:

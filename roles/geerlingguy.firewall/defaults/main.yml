@@ -21,8 +21,8 @@ firewall_additional_rules:
   - iptables -A INPUT  -p tcp -m tcp --dport 20 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
   - iptables -A OUTPUT -p tcp -m tcp --dport 20 -m conntrack --ctstate ESTABLISHED -j ACCEPT
     # Allow passive ftp connetions
-  - "iptables -A INPUT  -p tcp -m tcp --sport 50000:60000 --dport 50000:60000 -m conntrack --ctstate ESTABLISHED -j ACCEPT"
-  - "iptables -A OUTPUT -p tcp -m tcp --sport 50000:60000 --dport 50000:60000 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
+  - "iptables -A INPUT  -p tcp -m tcp --sport 1024: --dport 1024: -m conntrack --ctstate ESTABLISHED,NEW -j ACCEPT"
+  - "iptables -A OUTPUT -p tcp -m tcp --sport 1024: --dport 1024: -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
 
    # More simple way, need to load modprobe ip_conntrack_ftp
    #- "iptables -A PREROUTING -t raw -p tcp --dport 21 -j CT --helper ftp"

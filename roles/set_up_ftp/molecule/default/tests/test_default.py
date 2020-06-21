@@ -29,3 +29,7 @@ def test_ftp_users(host):
 
 def test_net_services_work(host):
     assert host.socket("tcp://0.0.0.0:21").is_listening
+
+def bin_false_in_shells(host):
+    shells = host.file('/etc/shells')
+    assert shells.contains('/bin/false')
