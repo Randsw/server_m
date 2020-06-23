@@ -1,4 +1,4 @@
 *vault.yml
 */__pycache__
 *.pyc
-roles/set_up_ftp/files/*.pem
+/roles/set_up_ftp/files/*.pem
