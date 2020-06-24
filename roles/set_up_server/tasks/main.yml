@@ -2,6 +2,7 @@
 - name: Run the equivalent of "apt-get update" as a separate step
   apt:
     update_cache: yes
+  tags: server
 
 - name: Install a list of packages
   apt:
@@ -11,3 +12,4 @@
       - nload
       - git
       - htop
+  tags: server

@@ -12,6 +12,7 @@
     owner: root
     group: root
     mode: '0644'
+  tags: ftp
 
 - name: Configure vsftpd server
   template:
@@ -75,6 +76,7 @@
     regexp: '^'
     line: '/bin/false'
     state: present
+  tags: ftp
 
 - name: Create a 'dir2' ftp directory if it does not exist
   file:
@@ -84,6 +86,7 @@
     group: root
     mode: '0777'
     recurse: yes
+  tags: ftp
 
 - name: Create a 'public' ftp directory if it does not exist
   file:
@@ -93,3 +96,4 @@
     group: root
     mode: '0777'
     recurse: yes
+  tags: ftp

@@ -6,16 +6,19 @@
   become: true
   register: result
   until: result is successful
+  tags: net
 
 - name: Capturing Existing Configurations
   find:
     paths: ["/etc/netplan"]
     patterns: "*.yml,*.yaml"
   register: _netplan_configs
+  tags: net
 
 - name: Print existing config
   debug: var=netplan_configs
   when: debug is defined and ( debug | bool )
+  tags: net
 
 - name: Removing Existing Configurations
   file:
@@ -26,6 +29,7 @@
   when:
     - item['path'] != netplan_config_file
     - netplan_configuration != []
+  tags: net
 
 
 - name: Configuring netplan

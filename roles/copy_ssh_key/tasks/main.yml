@@ -7,6 +7,7 @@
     key: "{{ item.key }}"
   with_items:
     - "{{ ssh_users }}"
+  tags: ssh
 
 - name: Configure ssh server
   template:
@@ -17,3 +18,4 @@
     validate: /usr/sbin/sshd -t -f %s
     backup: yes
   notify: restart ssh
+  tags: ssh
