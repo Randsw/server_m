@@ -17,6 +17,9 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      vault_password_file: "/home/rand/VSCode/ansible/ftp_role_pass"
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
 verifier:
