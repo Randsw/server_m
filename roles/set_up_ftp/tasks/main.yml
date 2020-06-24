@@ -32,34 +32,38 @@
 
 - name: Add the 7-2 users
   user:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
     shell: /bin/false
     group: ftp_users
     groups: ftp_users
     home: /mnt/hgfs/IO
+    password: "{{ item.password | password_hash('sha512') }}"
     state: present
   loop: "{{ dep2_user_list }}"
   tags: ftp
 
 - name: Create other users
   user:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
     shell: /bin/false
     group: ftp_users
     groups: ftp_users
     home: /mnt/hgfs/IO/Public
+    password: "{{ item.password | password_hash('sha512') }}"
     state: present
   loop: "{{ other_user_list }}"
   tags: ftp
 
 - name: Create KavUpdate user
   user:
-    name: KavUpdate
+    name: "{{ item.name }}"
     shell: /bin/false
     group: ftp_users
     groups: ftp_users
     home: /mnt/hgfs/IO
+    password: "{{ item.password | password_hash('sha512') }}"
     state: present
+  with_items: "{{ Kav_user }}"
   tags: ftp
 
 - name: Add "false" shell to /etc/shells

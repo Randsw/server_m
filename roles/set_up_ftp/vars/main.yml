@@ -1,11 +1,52 @@
 ---
-dep2_user_list: [Rand, chistov, Bychkov, Chernov,
-                 Chernyshova, Dmitriev, Kuritsyn,
-                 Lantsov, Makhaev_A, Shevtsev,
-                 Dolotkazina]
+dep2_user_list:
+  - name: Rand
+    password: MuFc2006
+  - name: chistov
+    password: test
+  - name: Bychkov
+    password: test
+  - name: Chernov
+    password: test
+  - name: Chernyshova
+    password: test
+  - name: Dmitriev
+    password: test
+  - name: Kuritsyn
+    password: test
+  - name: Lantsov
+    password: test
+  - name: Makhaev_A
+    password: test
+  - name: Shevtsev
+    password: test
+  - name: Dolotkazina
+    password: test
 
-other_user_list: [Ann, Antonovich, Pavel, solovyev,
-                  Emelyanov, DSBobrus, Alimov, dep4,
-                  klimov, Petr, Shutov]
+other_user_list:
+  - name: Ann
+    password: test
+  - name: Antonovich
+    password: test
+  - name: Pavel
+    password: test
+  - name: solovyev
+    password: test
+  - name: Emelyanov
+    password: test
+  - name: DSBobrus
+    password: test
+  - name: Alimov
+    password: test
+  - name: dep4
+    password: test
+  - name: klimov
+    password: test
+  - name: Petr
+    password: test
+  - name: Shutov
+    password: test
 
-Kav_user: KavUpdate
+Kav_user:
+  - name: KavUpdate
+    password: Kav10
