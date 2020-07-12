@@ -1,3 +1,4 @@
+#DHCP settings
 def_lease_time: "600"
 max_lease_time: 7200
 subnet: 192.168.1.0
@@ -23,7 +24,56 @@ netplan_configuration:
             eth0:
                 dhcp4: no
                 dhcp6: no
-                addresses: ["192.168.1.246/16"]
+                addresses: ["192.168.1.248/16"]
                 gateway4: '192.168.1.1'
                 nameservers:
-                    addresses: ["192.168.1.1"]
+                    addresses: ["192.168.1.248", "8.8.8.8"]
+
+# DNS Server settings
+bind_packages:
+  - python-netaddr
+  - bind9
+  - bind9utils
+bind_zone_file_mode: '0775'
+bind_allow_query:
+  - any
+bind_listen_ipv4:
+  - any
+bind_listen_ipv6:
+  - any
+bind_acls:
+  - name: acl1
+    match_list:
+      - 172.17.0.0/16
+      - 192.168.1.0/24
+bind_forwarders:
+  - '8.8.8.8'
+  - '8.8.4.4'
+bind_recursion: false
+bind_query_log: 'data/query.log'
+bind_check_names: "master ignore"
+bind_zone_master_server_ip: "192.168.1.248"
+bind_zone_minimum_ttl: "2D"
+bind_zone_ttl: "2W"
+bind_zone_time_to_refresh: "2D"
+bind_zone_time_to_retry: "2H"
+bind_zone_time_to_expire: "2W"
+bind_zone_domains:
+  - name: 'dep7server.com'
+    networks:
+      - '192.168.1'
+    name_servers:
+      - dep7server.com.
+    hostmaster_email: rand.dep7mail.com
+    hosts:
+      - name: mail
+        ip: 192.168.1.142
+      - name: jenkins
+        ip: 192.168.1.143
+      - name: repo
+        ip: 192.168.1.144
+      - name: "@"
+        ip: 192.168.1.142
+    mail_servers:
+      - name: mail
+        preference: 10

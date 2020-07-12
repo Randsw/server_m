@@ -1,0 +1,66 @@
+# roles/bind/tasks/main.yml
+---
+- name: Install python3-pip
+  package:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - python3-pip
+  tags: bind
+
+- name: install python docker
+  pip:
+    name: docker
+
+# Initialise distribution-specific variables
+- name: Source specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: bind,pretask
+
+- name: Check whether `bind_zone_master_server_ip` was set
+  assert:
+    that: bind_zone_master_server_ip is defined
+
+- name: Start Docker container with DNS server
+  docker_container:
+    name: "{{ dns_container_name }}"
+    image: sameersbn/bind:latest
+    state: started
+    ports:
+      - "{{ ansible_default_ipv4.address }}:53:53/tcp"
+      - "{{ ansible_default_ipv4.address }}:53:53/udp"
+    volumes:
+      - /srv/docker/bind:/data
+    restart_policy: always
+    env:
+      WEBMIN_ENABLED: "false"
+
+- name: Create serial, based on UTC UNIX time
+  command: date -u +%s
+  register: timestamp
+  changed_when: false
+  run_once: true
+  check_mode: false
+  tags: bind
+
+# file to set keys for XFR authentication
+- name: create extra config file for authenticated XFR request
+  tags: pretask
+  template:
+    src: auth_transfer.j2
+    dest: "{{ bind_conf_dir }}/{{ auth_file }}"
+    mode: "{{ bind_zone_file_mode }}"
+    owner: "{{ bind_owner }}"
+    group: "{{ bind_group }}"
+  when: bind_dns_keys is defined and bind_dns_keys|length > 0
+
+- name: Set up the machine as a master DNS server
+  include_tasks: master.yml
+  when: bind_zone_master_server_ip in ansible_all_ipv4_addresses
+
+- name: Set up the machine as a slave DNS server
+  include_tasks: slave.yml
+  when: bind_zone_master_server_ip not in ansible_all_ipv4_addresses

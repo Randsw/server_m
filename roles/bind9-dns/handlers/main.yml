@@ -1,0 +1,4 @@
+---
+- name: reload bind in Docker container
+  command: docker exec {{ dns_container_name }} service named restart
+  ignore_errors: yes
