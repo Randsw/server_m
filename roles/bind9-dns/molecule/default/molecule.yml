@@ -38,11 +38,6 @@ provisioner:
   name: ansible
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
-  options:
-    # Extra-verbose output
-    vvv: True
-  env:
-    MOLECULE_DEBUG: "True"
 
 verifier:
   name: testinfra

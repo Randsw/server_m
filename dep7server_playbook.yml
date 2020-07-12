@@ -7,7 +7,7 @@
     ansible_become_pass: '{{ dep7server_password }}'
 
   roles:
-    #- set_up_network
+    - set_up_network
     #- geerlingguy.firewall
     #- copy_ssh_key
     #- set_up_server

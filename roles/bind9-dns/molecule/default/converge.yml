@@ -5,8 +5,7 @@
   vars:
     bind_packages:
       - python-netaddr
-      - bind9
-      - bind9utils
+      - dnsutils
     bind_zone_file_mode: '0775'
     bind_allow_query:
       - any
@@ -56,7 +55,7 @@
         pkg: "{{ item }}"
         state: present
       with_items:
-        #- "{{ bind_packages }}"
+        - "{{ bind_packages }}"
         - python3-pip
       tags: bind
 

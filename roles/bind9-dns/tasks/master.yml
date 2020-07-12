@@ -107,7 +107,7 @@
     - db.empty
     - db.local
     - db.root
-  tags: bind  
+  tags: bind
 
 - name: Master | Create forward lookup zone file
   template:
