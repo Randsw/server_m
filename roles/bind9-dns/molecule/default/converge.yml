@@ -22,7 +22,7 @@
       - '8.8.8.8'
       - '8.8.4.4'
     bind_recursion: false
-    bind_query_log: 'data/query.log'
+    bind_query_log: "/data/bind/lib/named.log"
     bind_check_names: 'master ignore'
     bind_zone_master_server_ip: 172.17.0.2
     bind_zone_minimum_ttl: "2D"

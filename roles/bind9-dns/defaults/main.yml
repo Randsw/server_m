@@ -1,7 +1,7 @@
 # roles/bind/defaults/main.yml
 ---
 
-bind_log: "data/named.run"
+bind_log: "/data/bind/lib/named.log"
 
 bind_zone_domains:
   - name: "dep7server.com"

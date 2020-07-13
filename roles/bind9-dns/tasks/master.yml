@@ -77,8 +77,7 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
-    #validate: 'named-checkconf %s'
-  #notify: reload bind
+  notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Default zones BIND config file (master)
@@ -89,8 +88,7 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
-    #validate: 'named-checkconf %s'
-  #notify: reload bind
+  notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Default zones files copy
@@ -117,13 +115,12 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_zone_t
-    #validate: 'named-checkzone -d {{ item.name }} %s'
   with_items:
     - "{{ bind_zone_domains }}"
   loop_control:
     label: "{{ item.name }}"
   when: item.create_forward_zones is not defined or item.create_forward_zones
-  #notify: reload bind
+  notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Create reverse lookup zone file
@@ -134,7 +131,6 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_zone_t
-    #validate: "named-checkzone {{ ('.'.join(item.1.replace(item.1+'.','').split('.')[::-1])) }}.in-addr.arpa %s"
   with_subelements:
     - "{{ bind_zone_domains }}"
     - networks
@@ -154,7 +150,6 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_zone_t
-    #validate: "named-checkzone {{ (item.1 | ipaddr('revdns'))[-(9+(item.1|regex_replace('^.*/','')|int)//2):] }} %s"
   with_subelements:
     - "{{ bind_zone_domains }}"
     - ipv6_networks
@@ -163,5 +158,5 @@
   loop_control:
     label: "{{ item.1 }}"
   when: item.create_reverse_zones is not defined or item.create_reverse_zones
-  #notify: reload bind
+  notify: reload bind in Docker container
   tags: bind

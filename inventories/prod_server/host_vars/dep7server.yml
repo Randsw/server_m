@@ -30,10 +30,6 @@ netplan_configuration:
                     addresses: ["192.168.1.248", "8.8.8.8"]
 
 # DNS Server settings
-bind_packages:
-  - python-netaddr
-  - bind9
-  - bind9utils
 bind_zone_file_mode: '0775'
 bind_allow_query:
   - any
@@ -50,7 +46,19 @@ bind_forwarders:
   - '8.8.8.8'
   - '8.8.4.4'
 bind_recursion: false
-bind_query_log: 'data/query.log'
+bind_query_log: 
+  file: '/data/bind/lib/query.log'
+  versions: 100
+  size: 20m
+bind_other_logs:
+  - name: resolver
+    file: '/data/bind/lib/auth_servers.log'
+    versions: 50
+    size: 20m
+  - name: query-errors
+    file: '/data/bind/lib/query-errors.log'
+    versions: 5
+    size: 20m
 bind_check_names: "master ignore"
 bind_zone_master_server_ip: "192.168.1.248"
 bind_zone_minimum_ttl: "2D"
