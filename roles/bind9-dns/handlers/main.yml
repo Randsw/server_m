@@ -1,5 +1,19 @@
 ---
 - name: reload bind in Docker container
   command: docker exec {{ dns_container_name }} service named restart
-  register: command_result
-  failed_when: "'refused' in command_result.stdout"
+  register: command_reload_result
+  failed_when: "'refused' in command_reload_result.stdout"
+  notify: check container started properly
+
+- name: check container started properly
+  command: docker exec {{ dns_container_name }} service named status
+  register: command_check_result
+  changed_when: "command_check_result.rc != 0"
+  failed_when: false
+  notify: stop and remove container if failed
+
+- name: stop and remove container if failed
+  command: docker {{ item }} {{ dns_container_name }}
+  loop:
+    - stop
+    - rm

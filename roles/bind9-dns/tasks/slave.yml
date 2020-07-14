@@ -8,7 +8,7 @@
     dest: "{{ bind_config }}"
     owner: "{{ bind_owner }}"
     group: "{{ bind_group }}"
-    mode: '0640'
+    mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
   notify: reload bind in Docker container
   tags: bind
@@ -19,5 +19,5 @@
     state: directory
     owner: "{{ bind_owner }}"
     group: "{{ bind_group }}"
-    mode: '0770'
+    mode: "{{ bind_zone_file_mode }}"
     setype: named_cache_t
