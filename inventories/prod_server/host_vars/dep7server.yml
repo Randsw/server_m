@@ -85,3 +85,24 @@ bind_zone_domains:
     mail_servers:
       - name: mail
         preference: 10
+
+#Docker compose vars
+unit_config:
+  - name: rocketchat
+    Unit: 
+      Description: Docker compose application service
+      Requires: docker.service
+      After: docker.service
+    Service:
+      Type: oneshot
+      RemainAfterExit: yes
+      WorkingDirectory: /home/{{ ansible_user }}/
+      ExecStart: /usr/local/bin/docker-compose up -d
+      ExecStop: /usr/local/bin/docker-compose down
+      TimeoutStartSec: 0
+    Install:
+       WantedBy: multi-user.target
+
+docker_compose_owner: {{ ansible_user }}
+docker_compose_owner_group: {{ ansible_user }}
+docker_compose_dst: /home/{{ ansible_user }}/

@@ -1,0 +1,32 @@
+---
+- name: Copy docker compose file
+  copy:
+    src: docker-compose.yml
+    dest: "{{ docker_compose_dst}}"
+    owner: "{{ docker_compose_owner}}"
+    group: "{{ docker_compose_owner_group}}"
+    mode: '0644'
+
+- name: Render unit configuration
+  become: true
+  when: unit_config is defined and unit_config|length > 0
+  template:
+    src: "systemd.unit.j2"
+    dest: "{{ unit_item.path|default(_default_unit_path) }}/{{ unit_item.name }}.{{ unit_item.type|default(_default_unit_type) }}"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+    backup: true
+  vars:
+    config: "{{ unit_item }}"
+  register: "restart_units"
+  with_items: "{{ unit_config }}"
+  loop_control:
+    loop_var: unit_item
+  notify: Reload systemd units
+  tags:
+    - config
+
+- name: debug some
+  debug:
+    msg: "{{ restart_units.results[0] }}"

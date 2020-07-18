@@ -1,0 +1,22 @@
+---
+# role vars file
+
+docker_compose_owner: root
+docker_compose_owner_group: root
+docker_compose_dst: /root/docker-compose.yml
+
+unit_config:
+  - name: RocketChat
+    Unit:
+      Description: Docker compose application service
+      Requires: docker.service
+      After: docker.service
+    Service:
+      Type: oneshot
+      RemainAfterExit: yes
+      WorkingDirectory: /root
+      ExecStart: /usr/local/bin/docker-compose up -d
+      ExecStop: /usr/local/bin/docker-compose down
+      TimeoutStartSec: 0
+    Install:
+      WantedBy: multi-user.target
