@@ -8,7 +8,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_rocket_is_running(host):
     assert host.service('RocketChat').is_running
 
-def test_rocketchar_container_is_running(host):
+def test_rocketchat_container_is_running(host):
     rocketchat = host.docker("root_rocketchat_1")
     assert rocketchat.is_running
 

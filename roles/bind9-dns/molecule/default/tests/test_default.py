@@ -5,6 +5,10 @@ import testinfra.utils.ansible_runner
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
+def test_bind_container_is_running(host):
+    bind = host.docker("bind")
+    assert bind.is_running
+
 def test_bins_is_working(host):
     cmd = host.run('docker exec bind service named status')
     assert cmd.rc == 0
