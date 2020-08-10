@@ -1,0 +1,14 @@
+docker_compose_network: "172.17.0.0/24"
+docker_compose_env: docker-compose.env
+mail_server_domain: dep7serverm.com
+mail_server_hostnames: mail.dep7serverm.com
+TLS_FLAVOR: "cert"  
+webmail: roundcube
+webdav: radicale
+mail_antivirus: clamav
+mail_sitename: dep7serverm
+mail_website: "https://dep7serverm.com"
+docker_compose_path: /home/{{ ansible_user }}/docker_compose/docker-compose.yml
+docker_compose_env_path: /home/{{ ansible_user }}/docker_compose/docker-compose.env
+compose_dir: /home/{{ ansible_user }}/mailu
+mail_cert_dir: "{{ compose_dir }}/cert"

@@ -5,10 +5,18 @@ firewall_enabled_at_boot: true
 firewall_flush_rules_and_chains: true
 
 firewall_allowed_tcp_ports:
+  - "53"   # TCP
   - "22"   # ssh
   - "25"   # smtp
   - "80"   # http
   - "443"  # https
+  - "25"   # smtp
+  - "465"  # smtps
+  - "587"  # STARTTLS
+  - "110"  # POP3
+  - "995"  # POP3S
+  - "143"  # IMAP
+  - "993"  # IMAPS
 firewall_allowed_udp_ports:
   - "53"   # dns
 firewall_forwarded_tcp_ports: []

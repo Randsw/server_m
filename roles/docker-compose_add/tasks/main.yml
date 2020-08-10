@@ -1,0 +1,42 @@
+---
+- name: Create a directory for compose
+  file:
+    path: "{{ compose_dir }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0775'
+
+- name: Create a directory for mail certs
+  file:
+    path: "{{ mail_cert_dir }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: '0755'
+# cert file - dep7admin 0755
+
+#Try generate cert with ansible module
+#or 
+#just copy cert to cert dir
+
+
+- name: Configure docker compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+
+
+- name: Configure docker compose env file
+  template:
+    src: mailu.env.j2
+    dest: "{{ docker_compose_env_path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+#UP Compose 
