@@ -26,7 +26,3 @@
   notify: Reload systemd units
   tags:
     - config
-
-- name: debug some
-  debug:
-    msg: "{{ restart_units.results[0] }}"

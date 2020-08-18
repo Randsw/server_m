@@ -14,12 +14,26 @@
     owner: "root"
     group: "root"
     mode: '0755'
-# cert file - dep7admin 0755
+
+- name: Copy file with owner and permissions
+  copy:
+    src: "{{ item }}"
+    dest: "{{ mail_cert_dir }}/{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+  with_items:
+    - cert.pem
+    - key.pem
 
 #Try generate cert with ansible module
-#or 
-#just copy cert to cert dir
-
+# - name: Generate a Self Signed OpenSSL certificate.
+#   openssl_certificate:
+#     path: "{{ openssl_certs_path }}/{{ item.name }}.crt"
+#     privatekey_path: "{{ openssl_keys_path }}/{{ item.name }}.key"
+#     csr_path: "{{ openssl_csrs_path }}/{{ item.name }}.csr"
+#     provider: selfsigned
+#   with_items: "{{ openssl_self_signed }}"
 
 - name: Configure docker compose file
   template:
@@ -29,8 +43,6 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
-
-
 - name: Configure docker compose env file
   template:
     src: mailu.env.j2
@@ -39,4 +51,7 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
-#UP Compose 
+- name: Docker-Compose UP
+  docker_compose:
+    project_src: "{{ docker_compose_path }}"
+  register: output
