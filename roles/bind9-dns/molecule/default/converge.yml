@@ -50,7 +50,10 @@
           - name: mail
             preference: 10
   pre_tasks:
-    - name: Install BIND
+    - name: Update apt cache.
+      apt: update_cache=yes cache_valid_time=600
+
+    - name: Install package
       package:
         pkg: "{{ item }}"
         state: present

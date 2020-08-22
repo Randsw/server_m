@@ -51,7 +51,11 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
+- name: Debug
+  debug:
+    var: docker_compose_path
+
 - name: Docker-Compose UP
   docker_compose:
-    project_src: "{{ docker_compose_path }}"
+    project_src: "{{ compose_dir }}"
   register: output

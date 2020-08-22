@@ -5,17 +5,18 @@
   vars:
     ansible_user: root
   pre_tasks:
-    - name: Install BIND
+    - name: Install pip
       package:
         pkg: "{{ item }}"
         state: present
       with_items:
-        - "{{ bind_packages }}"
         - python3-pip
 
     - name: install python docker
       pip:
-        name: docker
+        name:
+          - docker
+          - docker-compose
 
   roles:
     - role: geerlingguy.docker
