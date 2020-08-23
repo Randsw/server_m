@@ -2,9 +2,9 @@
 - name: Copy docker compose file
   copy:
     src: docker-compose.yml
-    dest: "{{ docker_compose_dst}}"
-    owner: "{{ docker_compose_owner}}"
-    group: "{{ docker_compose_owner_group}}"
+    dest: "{{ docker_compose_dst }}"
+    owner: "{{ docker_compose_owner }}"
+    group: "{{ docker_compose_owner_group }}"
     mode: '0644'
 
 - name: Render unit configuration

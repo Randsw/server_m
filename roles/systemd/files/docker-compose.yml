@@ -34,7 +34,7 @@ services:
     image: mongo:4.0
     restart: unless-stopped
     volumes:
-     - ./data/db:/data/db
+      - ./data/db:/data/db
      #- ./data/dump:/dump
     command: mongod --smallfiles --oplogSize 128 --replSet rs0 --storageEngine=mmapv1
     labels:

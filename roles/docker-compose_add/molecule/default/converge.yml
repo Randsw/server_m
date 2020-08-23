@@ -4,7 +4,11 @@
   become: yes
   vars:
     ansible_user: root
+    docker_users: root
   pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=yes cache_valid_time=600
+
     - name: Install pip
       package:
         pkg: "{{ item }}"

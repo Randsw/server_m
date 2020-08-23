@@ -1,5 +1,5 @@
 ---
-docker_compose_network: "172.17.0.0/24"
+docker_compose_network: "172.19.0.0/24"
 docker_compose_env: docker-compose.env
 mail_server_domain: dep7serverm.com
 mail_server_hostnames: mail.dep7serverm.com

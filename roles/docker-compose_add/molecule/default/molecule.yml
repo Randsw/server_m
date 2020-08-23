@@ -39,7 +39,7 @@ provisioner:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
   config_options:
     defaults:
-      verbosity: 4
+      verbosity: 1
 
 verifier:
   name: testinfra
