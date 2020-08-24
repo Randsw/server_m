@@ -15,4 +15,5 @@
     #- set_up_dhcp
     #- set_up_ftp
     #- bind9-dns
+    - docker-compose_add
 
