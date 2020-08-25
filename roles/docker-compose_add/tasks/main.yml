@@ -1,4 +1,19 @@
 ---
+- name: Run the equivalent of "apt-get update" as a separate step # delete after test
+  apt:
+    update_cache: yes
+
+- name: Install a list of packages # delete after test
+  apt:
+    pkg:
+      - python3-pip
+
+- name: Install python packages for docker
+  pip: 
+    name: 
+      - docker
+      - docker-compose
+
 - name: Create a directory for compose
   file:
     path: "{{ compose_dir }}"
@@ -61,3 +76,7 @@
   docker_compose:
     project_src: "{{ compose_dir }}"
   register: output
+
+- name: Create admin account
+  command: docker-compose exec admin flask mailu admin {{ admin_mail_name }} {{ mail_domain }} {{ dep7server_password }}
+    

@@ -12,4 +12,7 @@ mail_website: "https://dep7serverm.com"
 docker_compose_path: /home/{{ ansible_user }}/docker_compose/docker-compose.yml
 docker_compose_env_path: /home/{{ ansible_user }}/docker_compose/docker-compose.env
 compose_dir: /home/{{ ansible_user }}/docker_compose
-mail_cert_dir: "{{ compose_dir }}/cert"
+volume_dir: /home/{{ ansible_user }}/mailu
+mail_cert_dir: "{{ volume_dir }}/certs"
+mail_domain: "dep7serverm.com"
+admin_mail_name: "rand"
