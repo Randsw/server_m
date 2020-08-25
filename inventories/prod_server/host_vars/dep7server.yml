@@ -1,3 +1,5 @@
+docker_users: dep7serverm
+
 #DHCP settings
 def_lease_time: "600"
 max_lease_time: 7200

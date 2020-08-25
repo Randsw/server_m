@@ -1,4 +1,19 @@
 ---
+- name: Run the equivalent of "apt-get update" as a separate step # delete after test
+  apt:
+    update_cache: yes
+
+- name: Install a list of packages # delete after test
+  apt:
+    pkg:
+      - python3-pip
+
+- name: Install python packages for docker
+  pip: 
+    name: 
+      - docker
+      - docker-compose
+
 - name: Create a directory for compose
   file:
     path: "{{ compose_dir }}"
