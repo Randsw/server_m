@@ -13,4 +13,4 @@ docker_compose_path: /home/{{ ansible_user }}/docker_compose/docker-compose.yml
 docker_compose_env_path: /home/{{ ansible_user }}/docker_compose/docker-compose.env
 compose_dir: /home/{{ ansible_user }}/docker_compose
 volume_dir: /home/{{ ansible_user }}/mailu
-mail_cert_dir: "{{ volume_dir }}/cert"
+mail_cert_dir: "{{ volume_dir }}/certs"
