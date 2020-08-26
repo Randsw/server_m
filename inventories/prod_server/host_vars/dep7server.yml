@@ -88,7 +88,7 @@ bind_zone_domains:
       - name: mail
         preference: 10
 
-#Docker compose vars
+#Docker compose vars for systemd
 unit_config:
   - name: rocketchat
     Unit: 
@@ -108,3 +108,6 @@ unit_config:
 docker_compose_owner: "{{ ansible_user }}"
 docker_compose_owner_group: "{{ ansible_user }}"
 docker_compose_dst: /home/{{ ansible_user }}/
+
+#Prometheus node exporter
+node_exporter_web_listen_address: "{{ ansible_default_ipv4.address }}:9100"

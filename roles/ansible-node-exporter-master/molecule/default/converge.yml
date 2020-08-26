@@ -1,0 +1,23 @@
+---
+- name: Converge
+  hosts: all
+  become: yes
+  vars:
+    node_exporter_web_listen_address: "127.0.0.1:9100"
+  pre_tasks:
+#    - name: Update apt cache.
+#      apt: update_cache=yes cache_valid_time=600
+#    - name: Install pip
+#      package:
+#        pkg: "{{ item }}"
+#        state: present
+#      with_items:
+#        - python3-pip
+
+#    - name: install python docker
+#      pip:
+#        name:
+#          - docker
+#          - docker-compose
+  roles:
+    - role: ansible-node-exporter-master
