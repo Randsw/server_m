@@ -14,3 +14,5 @@ docker_compose_env_path: /home/{{ ansible_user }}/docker_compose/docker-compose.
 compose_dir: /home/{{ ansible_user }}/docker_compose
 volume_dir: /home/{{ ansible_user }}/mailu
 mail_cert_dir: "{{ volume_dir }}/certs"
+mail_domain: "dep7serverm.com"
+admin_mail_name: "rand"

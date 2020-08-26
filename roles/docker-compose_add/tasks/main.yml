@@ -9,8 +9,8 @@
       - python3-pip
 
 - name: Install python packages for docker
-  pip: 
-    name: 
+  pip:
+    name:
       - docker
       - docker-compose
 
@@ -75,4 +75,15 @@
 - name: Docker-Compose UP
   docker_compose:
     project_src: "{{ compose_dir }}"
-  register: output
+
+- name: Create admin account
+  command: "docker-compose exec admin flask mailu admin {{ admin_mail_name }} {{ mail_domain }} {{ dep7server_password }}"
+  args:
+    chdir: "{{ compose_dir }}"
+  changed_when: false
+  register: admin_create
+  ignore_errors: True
+
+- name: Debug admin create
+  debug:
+    msg: "{{ admin_create }}"
