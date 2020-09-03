@@ -19,7 +19,7 @@ provisioner:
   name: ansible
   config_options:
     defaults:
-      vault_password_file: "/home/rand/VSCode/ansible/ftp_role_pass"
+      vault_password_file: "/home/cluster01/work/ansible/ftp_role_pass"
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
 verifier:
