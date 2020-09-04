@@ -42,3 +42,6 @@
 
 - import_tasks: disable-other-firewalls.yml
   when: firewall_disable_firewalld or firewall_disable_ufw
+
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers

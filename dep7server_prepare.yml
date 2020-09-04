@@ -1,0 +1,32 @@
+- hosts: dep7server
+  become: yes
+  gather_facts: no
+
+  vars_files:
+    #- ~/VSCode/ansible/dep7server_m/dep7server_vault.yml 
+    - ~/work/ansible/server_m/dep7server_vault.yml
+  vars:
+    ansible_become_pass: '{{ dep7server_password }}'
+  
+  pre_tasks:
+    - name: Accept server SSH host keys
+      connection: local
+      become: false
+      shell: |
+        ssh-keygen -F {{ ansible_host }} ||
+        ssh-keyscan -H {{ ansible_host }} >> ~/.ssh/known_hosts
+      register: known_hosts_script
+      changed_when: "'found' not in known_hosts_script.stdout"
+
+    - name: Gathering Facts
+      setup:
+
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      lineinfile:
+        path: /etc/cloud/cloud-init.disabled
+        line: cloud-init=disabled
+        create: yes
+        state: present
+
+  roles:
+    - set_up_network

@@ -1,8 +1,8 @@
 ---
 ssh_users:
     name: dep7admin
-    #key: "{{ lookup('file', 'roles/copy_ssh_key/files/dep7server_m.pub') }}"
-    key: "{{ lookup('file', 'files/dep7server_m.pub') }}"
+    #key: "{{ lookup('file', 'files/dep7server_m.pub') }}"
+    key: "{{ lookup('file', 'files/dep7serverm.pub') }}"
     servers:
         - prod_server
     state: present

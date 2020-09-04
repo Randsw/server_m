@@ -17,6 +17,9 @@ firewall_allowed_tcp_ports:
   - "995"  # POP3S
   - "143"  # IMAP
   - "993"  # IMAPS
+  - "3000" # Grafana
+  - "5601" # Kibana
+  - "3333" # Rocketchat
 firewall_allowed_udp_ports:
   - "53"   # dns
 firewall_forwarded_tcp_ports: []

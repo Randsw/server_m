@@ -19,3 +19,6 @@
     backup: yes
   notify: restart ssh
   tags: ssh
+
+- name: Force all notified handlers to run at this point
+  meta: flush_handlers

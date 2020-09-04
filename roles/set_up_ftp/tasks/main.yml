@@ -42,6 +42,7 @@
     update_password: on_create
     state: present
   loop: "{{ dep2_user_list }}"
+  no_log: true
   tags: ftp
 
 - name: Create other users
@@ -55,6 +56,7 @@
     update_password: on_create
     state: present
   loop: "{{ other_user_list }}"
+  no_log: true  
   tags: ftp
 
 - name: Create KavUpdate user
@@ -68,6 +70,7 @@
     update_password: on_create
     state: present
   with_items: "{{ Kav_user }}"
+  no_log: true  
   tags: ftp
 
 - name: Add "false" shell to /etc/shells
@@ -97,3 +100,6 @@
     mode: '0777'
     recurse: yes
   tags: ftp
+
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
