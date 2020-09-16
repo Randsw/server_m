@@ -12,4 +12,12 @@
       - nload
       - git
       - htop
+      - rsyslog
   tags: server
+
+- name: Configure rsyslog to send syslog logs to specified host and port
+  lineinfile:
+    path: "{{ rsyslog_path | default('/etc/rsyslog.d/50-default.conf') }}"
+    line: "*.*\ @{{ fluentd_address | default(127.0.0.1) }}:\
+          {{ fluentd_port | default(5140) }};RSYSLOG_SyslogProtocol23Format"
+    mode: "0644"

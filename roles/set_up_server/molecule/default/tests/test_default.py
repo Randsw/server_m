@@ -29,3 +29,8 @@ def test_nload_is_installed(host):
     cmd = host.run('nload --help')
     assert cmd.rc == 0
     assert cmd.stdout.find(u'nload version') > -1
+
+def test_rsyslog_config(host):
+    rsyslog_conf = host.file('/etc/rsyslog.d/50-default.conf')
+    assert rsyslog_conf.exists
+    assert rsyslog_conf.contains('*.* @127.0.0.1:5140;RSYSLOG_SyslogProtocol23Format')

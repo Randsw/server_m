@@ -1,0 +1,4 @@
+---
+fluentd_address: 127.0.0.1
+fluent_port: fluentd_port
+rsyslog_path: /etc/rsyslog.d/50-default.conf
