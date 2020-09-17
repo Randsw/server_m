@@ -11,9 +11,9 @@
     - copy_ssh_key
     - geerlingguy.firewall
     - set_up_server
-    #- geerlingguy.docker
-    #- set_up_dhcp
+    - geerlingguy.docker
+    - set_up_dhcp
     - set_up_ftp
-    #- bind9-dns
-    #- systemd
-    #- ansible-node-exporter-master
+    - bind9-dns
+    - docker-compose_add
+

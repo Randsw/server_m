@@ -16,3 +16,17 @@ volume_dir: /home/{{ ansible_user }}/mailu
 mail_cert_dir: "{{ volume_dir }}/certs"
 mail_domain: "dep7serverm.com"
 admin_mail_name: "rand"
+
+services_paths:
+  - path: "/home/{{ ansible_user }}/docker_compose/monitoring/prometheus"
+    mode: "0777"
+  - path: "/home/{{ ansible_user }}/docker_compose/monitoring/prometheus/prometheus_data"
+    mode: "0777"
+  - path: "/home/{{ ansible_user }}/docker_compose/monitoring/grafana"
+    mode: "0777"
+  - path: "/home/{{ ansible_user }}/docker_compose/monitoring/grafana/grafana_data"
+    mode: "0777"
+  - path: "/home/{{ ansible_user }}/docker_compose/mail"
+    mode: "0777"
+  - path: "/home/{{ ansible_user }}/docker_compose/mail/data"
+    mode: "0750"

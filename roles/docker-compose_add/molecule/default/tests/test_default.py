@@ -68,3 +68,23 @@ def test_listening_startls(host):
 
 def test_listening_smtps(host):
     assert host.socket("tcp://0.0.0.0:587").is_listening
+
+def test_compose_config_dir_exist(host):
+    grafana_dir = host.file('/home/root/docker_compose/monitoring/grafana')
+    assert grafana_dir.exists
+    assert oct(grafana_dir.mode) == '0o777'
+    grafana_data_dir = host.file('/home/root/docker_compose/monitoring/grafana/grafana_data')
+    assert grafana_data_dir.exists
+    assert oct(grafana_data_dir.mode) == '0o777'
+    prometheus_dir = host.file('/home/root/docker_compose/monitoring/prometheus')
+    assert prometheus_dir.exists
+    assert oct(prometheus_dir.mode) == '0o777'
+    prometheus_data_dir = host.file('/home/root/docker_compose/monitoring/prometheus/prometheus_data')
+    assert prometheus_data_dir.exists
+    assert oct(prometheus_data_dir.mode) == '0o777'
+    mail_dir = host.file('/home/root/docker_compose/mail')
+    assert mail_dir.exists
+    assert oct(mail_dir.mode) == '0o777'
+    mail_data_dir = host.file('/home/root/docker_compose/mail/data')
+    assert mail_data_dir.exists
+    assert oct(mail_data_dir.mode) == '0o750'

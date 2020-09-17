@@ -22,6 +22,15 @@
     group: "{{ ansible_user }}"
     mode: '0775'
 
+- name: create dir for docker persistent data
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "{{ item.mode }}"
+  loop: "{{ services_paths }}"
+
 - name: Create a directory for mail certs
   file:
     path: "{{ mail_cert_dir }}"
