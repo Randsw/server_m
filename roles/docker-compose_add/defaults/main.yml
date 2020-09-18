@@ -30,3 +30,5 @@ services_paths:
     mode: "0777"
   - path: "/home/{{ ansible_user }}/docker_compose/mail/data"
     mode: "0750"
+  - path: "/home/{{ ansible_user }}/docker_compose/logging/elasticsearch/data"
+    mode: "0777"

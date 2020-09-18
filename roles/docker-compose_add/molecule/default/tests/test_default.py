@@ -88,3 +88,6 @@ def test_compose_config_dir_exist(host):
     mail_data_dir = host.file('/home/root/docker_compose/mail/data')
     assert mail_data_dir.exists
     assert oct(mail_data_dir.mode) == '0o750'
+    es_data_dir = host.file('/home/root/docker_compose/logging/elasticsearch/data')
+    assert es_data_dir.exists
+    assert oct(es_data_dir.mode) == '0o777'
