@@ -7,12 +7,14 @@
 - name: Install a list of packages
   apt:
     pkg:
+      - python3-pip
       - mc
       - ncdu
       - nload
       - git
       - htop
       - rsyslog
+      - rsync
   tags: server
 
 - name: Configure rsyslog to send syslog logs to specified host and port

@@ -1,16 +1,10 @@
 # roles/bind/tasks/main.yml
 ---
 - name: Install python3-pip
-  package:
-    pkg: "{{ item }}"
+  apt:
+    pkg: [python3-pip]
     state: present
-  with_items:
-    - python3-pip
   tags: bind
-
-- name: install python docker
-  pip:
-    name: docker
 
 # Initialise distribution-specific variables
 - name: Source specific variables
@@ -24,19 +18,28 @@
   assert:
     that: bind_zone_master_server_ip is defined
 
-- name: Start Docker container with DNS server
-  docker_container:
-    name: "{{ dns_container_name }}"
-    image: sameersbn/bind:latest
-    state: started
-    ports:
-      - "{{ ansible_default_ipv4.address }}:53:53/tcp"
-      - "{{ ansible_default_ipv4.address }}:53:53/udp"
-    volumes:
-      - /srv/docker/bind:/data
-    restart_policy: always
-    env:
-      WEBMIN_ENABLED: "false"
+- name: create dir for Bind data
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.user }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ DNS_path }}"
+
+# - name: Start Docker container with DNS server
+#   docker_container:
+#     name: "{{ dns_container_name }}"
+#     image: sameersbn/bind:latest
+#     state: started
+#     ports:
+#       - "{{ ansible_default_ipv4.address }}:53:53/tcp"
+#       - "{{ ansible_default_ipv4.address }}:53:53/udp"
+#     volumes:
+#       - /srv/docker/bind:/data
+#     restart_policy: always
+#     env:
+#       WEBMIN_ENABLED: "false"
 
 - name: Create serial, based on UTC UNIX time
   command: date -u +%s
@@ -51,7 +54,7 @@
   tags: pretask
   template:
     src: auth_transfer.j2
-    dest: "{{ bind_conf_dir }}/{{ auth_file }}"
+    dest: "{{ bind_zone_dir }}/{{ auth_file }}"
     mode: "{{ bind_zone_file_mode }}"
     owner: "{{ bind_owner }}"
     group: "{{ bind_group }}"

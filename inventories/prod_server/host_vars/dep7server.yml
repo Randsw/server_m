@@ -50,16 +50,16 @@ bind_forwarders:
   - '8.8.4.4'
 bind_recursion: false
 bind_query_log: 
-  file: '/data/bind/lib/query.log'
+  file: '{{ bind_dir }}/lib/query.log'
   versions: 100
   size: 20m
 bind_other_logs:
   - name: resolver
-    file: '/data/bind/lib/auth_servers.log'
+    file: '{{ bind_dir }}/lib/auth_servers.log'
     versions: 50
     size: 20m
   - name: query-errors
-    file: '/data/bind/lib/query-errors.log'
+    file: '{{ bind_dir }}/lib/query-errors.log'
     versions: 5
     size: 20m
 bind_check_names: "master ignore"
@@ -70,12 +70,12 @@ bind_zone_time_to_refresh: "2D"
 bind_zone_time_to_retry: "2H"
 bind_zone_time_to_expire: "2W"
 bind_zone_domains:
-  - name: 'dep7server.com'
+  - name: 'dep7serverm.com'
     networks:
       - '192.168.1'
     name_servers:
-      - dep7server.com.
-    hostmaster_email: rand.dep7mail.com
+      - dep7serverm.com.
+    hostmaster_email: rand.dep7serverm.com
     hosts:
       - name: mail
         ip: 192.168.1.142

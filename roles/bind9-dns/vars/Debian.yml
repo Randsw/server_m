@@ -8,31 +8,31 @@ bind_packages:
 
 bind_service: bind9
 
-# Main config file
-bind_config: "/srv/docker/bind/bind/etc/named.conf"
-
 # Localhost zone
 bind_default_zone_files:
-  - /etc/bind/named.conf.default-zones
+  - files
+
+# Main config file
+#bind_config: "/srv/docker/bind/bind/etc/named.conf"
+bind_conf_dir: "/home/{{ ansible_user }}/docker_compose/bind"
+bind_config: "{{ bind_conf_dir }}/etc/named.conf"
 
 # Directory with run-time stuff
-bind_dir: /srv/docker/bind/bind/lib
-bind_conf_dir: "/srv/docker/bind/bind/etc"
+bind_dir: "{{ bind_conf_dir }}/lib"
 auth_file: "auth_transfer.conf"
 bind_auth_file: "{{ bind_conf_dir }}/{{ auth_file }}"
 
 # Docker bind path
-bind_zone_dir_docker: "/data/bind/lib"
+bind_zone_dir_docker: "/etc/bind"
 
 
 bind_owner: systemd-network
 bind_group: systemd-journal
 
-bind_bindkeys_file: "/etc/named.iscdlv.key"
+bind_bindkeys_file: "{{ bind_conf_dir }}/etc/named.iscdlv.key"
 bind_pid_file: "/run/named/named.pid"
 bind_session_keyfile: "/run/named/session.key"
 
 # Custom location for master zone files
-bind_zone_dir: "{{ bind_dir }}"
-bind_slave_dir: "{{ bind_dir }}/slaves"
-dns_container_name: bind
+bind_zone_dir: "{{ bind_conf_dir }}/etc"
+bind_slave_dir: "{{ bind_conf_dir }}/slaves"

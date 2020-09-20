@@ -15,7 +15,7 @@ def test_ssh_pub_key(host):
     assert ssh_conf.exists
     assert pub_key.exists
     assert ssh_conf.contains('PermitRootLogin no')
-    assert pub_key.contains('rand@rand-PC')
+    assert pub_key.contains('cluster01@cluster01-PC')
 
 def test_net_services_work(host):
     assert host.socket("tcp://172.17.0.2:22").is_listening

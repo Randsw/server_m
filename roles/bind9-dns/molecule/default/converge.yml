@@ -3,9 +3,7 @@
   hosts: all
   become: yes
   vars:
-    bind_packages:
-      - python-netaddr
-      - dnsutils
+    ansible_user: "root"
     bind_zone_file_mode: '0775'
     bind_allow_query:
       - any
@@ -22,7 +20,7 @@
       - '8.8.8.8'
       - '8.8.4.4'
     bind_recursion: false
-    bind_query_log: "/data/bind/lib/named.log"
+    bind_query_log: "{{ bind_dir }}/named.log"
     bind_check_names: 'master ignore'
     bind_zone_master_server_ip: 172.17.0.2
     bind_zone_minimum_ttl: "2D"
@@ -53,18 +51,5 @@
     - name: Update apt cache.
       apt: update_cache=yes cache_valid_time=600
 
-    - name: Install package
-      package:
-        pkg: "{{ item }}"
-        state: present
-      with_items:
-        - "{{ bind_packages }}"
-        - python3-pip
-
-    - name: install python docker
-      pip:
-        name: docker
-
   roles:
-    - role: geerlingguy.docker
     - role: bind9-dns

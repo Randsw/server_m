@@ -1,11 +1,11 @@
 # roles/bind/defaults/main.yml
 ---
 
-bind_log: "/data/bind/lib/named.log"
+bind_log: "{{ bind_dir }}/named.log"
 
 bind_zone_domains:
-  - name: "dep7server.com"
-    hostmaster_email: "randsw@dep7mail.com"
+  - name: "dep7serverm.com"
+    hostmaster_email: "randsw@dep7serverm.com"
     networks:
       - "129.200.9"
 
@@ -71,3 +71,18 @@ bind_zone_minimum_ttl: "1D"
 
 # File mode for master zone files (needs to be something like 0660 for dynamic updates)
 bind_zone_file_mode: "0775"
+
+#DNS config patch
+DNS_path:
+  - path: "/home/{{ ansible_user }}/docker_compose/bind"
+    mode: "0775"
+    user: systemd-network
+    group: systemd-journal
+  - path: "/home/{{ ansible_user }}/docker_compose/bind/etc"
+    mode: "2775"
+    user: systemd-network
+    group: systemd-journal
+  - path: "/home/{{ ansible_user }}/docker_compose/bind/lib"
+    mode: "0755"
+    user: systemd-network
+    group: systemd-journal

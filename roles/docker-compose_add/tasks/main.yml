@@ -1,13 +1,4 @@
 ---
-- name: Run the equivalent of "apt-get update" as a separate step # delete after test
-  apt:
-    update_cache: yes
-
-- name: Install a list of packages # delete after test
-  apt:
-    pkg:
-      - python3-pip
-
 - name: Install python packages for docker
   pip:
     name:
@@ -21,13 +12,20 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0775'
+  changed_when: false # Bug? We create dir with same user:group:mode rules but ansible see idempotence?
+
+- name: Copy services config files to host
+  synchronize:
+    src: "service_conf/"
+    dest: "{{ compose_dir }}"
+  changed_when: false # Since in this role wee create only dirs, rsync mark this different bun don't del new dirs
 
 - name: create dir for docker persistent data
   file:
     path: "{{ item.path }}"
     state: directory
-    owner: "root"
-    group: "root"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: "{{ item.mode }}"
   loop: "{{ services_paths }}"
 
@@ -35,8 +33,8 @@
   file:
     path: "{{ mail_cert_dir }}"
     state: directory
-    owner: "root"
-    group: "root"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
     mode: '0755'
 
 - name: Copy file with owner and permissions
@@ -75,24 +73,13 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
-- name: Restart docker #https://stackoverflow.com/questions/38087027/docker-compose-stuck-downloading-or-pulling-fs-layer
-  service:
-    name: docker
-    state: restarted
-  changed_when: false
+# - name: Restart docker #https://stackoverflow.com/questions/38087027/docker-compose-stuck-downloading-or-pulling-fs-layer
+#   service:
+#     name: docker
+#     state: restarted
+#   changed_when: false
 
-- name: Docker-Compose UP
-  docker_compose:
-    project_src: "{{ compose_dir }}"
-
-- name: Create admin account
-  command: "docker-compose exec admin flask mailu admin {{ admin_mail_name }} {{ mail_domain }} {{ dep7server_password }}"
-  args:
-    chdir: "{{ compose_dir }}"
-  changed_when: false
-  register: admin_create
-  ignore_errors: True
-
-- name: Debug admin create
-  debug:
-    msg: "{{ admin_create }}"
+# - name: Docker-Compose UP
+#   docker_compose:
+#    project_src: "{{ compose_dir }}"
+#    build: yes

@@ -6,44 +6,104 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 def test_webmail_container_is_running(host):
-    webmail = host.docker("docker_compose_webmail_1")
+    webmail = host.docker("roundcube")
     assert webmail.is_running
 
 def test_smtp_container_is_running(host):
-    smtp = host.docker("docker_compose_smtp_1")
+    smtp = host.docker("mail_smtp")
     assert smtp.is_running
 
 def test_imap_container_is_running(host):
-    imap = host.docker("docker_compose_imap_1")
+    imap = host.docker("mail_imap")
     assert imap.is_running
 
 def test_antispam_container_is_running(host):
-    antispam = host.docker("docker_compose_antispam_1")
+    antispam = host.docker("mail_antispam")
     assert antispam.is_running
 
 def test_admin_container_is_running(host):
-    admin = host.docker("docker_compose_admin_1")
+    admin = host.docker("mail_admin")
     assert admin.is_running
 
 def test_webdav_container_is_running(host):
-    webdav = host.docker("docker_compose_webdav_1")
+    webdav = host.docker("mail_webdav")
     assert webdav.is_running
 
 def test_database_container_is_running(host):
-    database = host.docker("docker_compose_database_1")
+    database = host.docker("mail_postgresql")
     assert database.is_running
 
 def test_fetchmail_container_is_running(host):
-    fetchmail = host.docker("docker_compose_fetchmail_1")
+    fetchmail = host.docker("fetchmail")
     assert fetchmail.is_running
 
 def test_antivirus_container_is_running(host):
-    antivirus = host.docker("docker_compose_antivirus_1")
+    antivirus = host.docker("mail_antivirus")
     assert antivirus.is_running
 
 def test_redis_container_is_running(host):
-    redis = host.docker("docker_compose_redis_1")
+    redis = host.docker("mail_redis")
     assert redis.is_running
+
+def test_redis_container_is_running(host):
+    front = host.docker("front")
+    assert front.is_running
+
+def test_webmail_container_is_running(host):
+    bind = host.docker("bind")
+    assert bind.is_running
+
+def test_smtp_container_is_running(host):
+    elasticsearch = host.docker("elasticsearch")
+    assert elasticsearch.is_running
+
+def test_imap_container_is_running(host):
+    kibana = host.docker("kibana")
+    assert kibana.is_running
+
+def test_antispam_container_is_running(host):
+    fluentd = host.docker("fluentd")
+    assert fluentd.is_running
+
+def test_admin_container_is_running(host):
+    curator = host.docker("curator")
+    assert curator.is_running
+
+def test_webdav_container_is_running(host):
+    rocketchat = host.docker("rocketchat")
+    assert rocketchat.is_running
+
+def test_database_container_is_running(host):
+    mongo = host.docker("mongo")
+    assert mongo.is_running
+
+def test_fetchmail_container_is_running(host):
+    prometheus = host.docker("prometheus")
+    assert prometheus.is_running
+
+def test_antivirus_container_is_running(host):
+    alertmanager = host.docker("alertmanager")
+    assert alertmanager.is_running
+
+def test_redis_container_is_running(host):
+    nodeexporter = host.docker("nodeexporter")
+    assert nodeexporter.is_running
+
+def test_admin_container_is_running(host):
+    cadvisor = host.docker("cadvisor")
+    assert cadvisor.is_running
+
+def test_webdav_container_is_running(host):
+    grafana = host.docker("grafana")
+    assert grafana.is_running
+
+def test_database_container_is_running(host):
+    pushgateway = host.docker("pushgateway")
+    assert pushgateway.is_running
+
+def test_fetchmail_container_is_running(host):
+    gitlab = host.docker("gitlab")
+    assert gitlab.is_running
 
 def test_listening_http(host):
     assert host.socket("tcp://0.0.0.0:80").is_listening

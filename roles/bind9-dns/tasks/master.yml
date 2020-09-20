@@ -77,35 +77,35 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
-  notify: reload bind in Docker container
+  #notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Default zones BIND config file (master)
   template:
     src: named.conf.default-zones.j2
-    dest: "{{ bind_conf_dir }}/named.conf.default-zones"
+    dest: "{{ bind_zone_dir }}/named.conf.default-zones"
     owner: "{{ bind_owner }}"
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
-  notify: reload bind in Docker container
+  #notify: reload bind in Docker container
   tags: bind
 
-- name: Master | Default zones files copy
-  copy:
-    src: "{{ item }}"
-    dest: "{{ bind_zone_dir }}/{{ item }}"
-    owner: "{{ bind_owner }}"
-    group: "{{ bind_group }}"
-    mode: "{{ bind_zone_file_mode }}"
-  with_items:
-    - db.0
-    - db.127
-    - db.255
-    - db.empty
-    - db.local
-    - db.root
-  tags: bind
+# - name: Master | Default zones files copy
+#   copy:
+#     src: "{{ item }}"
+#     dest: "{{ bind_zone_dir }}/{{ item }}"
+#     owner: "{{ bind_owner }}"
+#     group: "{{ bind_group }}"
+#     mode: "{{ bind_zone_file_mode }}"
+#   with_items:
+#     - db.0
+#     - db.127
+#     - db.255
+#     - db.empty
+#     - db.local
+#     - db.root
+#   tags: bind
 
 - name: Master | Create forward lookup zone file
   template:
@@ -120,7 +120,7 @@
   loop_control:
     label: "{{ item.name }}"
   when: item.create_forward_zones is not defined or item.create_forward_zones
-  notify: reload bind in Docker container
+#  notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Create reverse lookup zone file
@@ -139,7 +139,7 @@
   loop_control:
     label: "{{ item.1 }}"
   when: item.create_reverse_zones is not defined or item.create_reverse_zones
-  notify: reload bind in Docker container
+  #notify: reload bind in Docker container
   tags: bind
 
 - name: Master | Create reverse IPv6 lookup zone file
@@ -158,5 +158,5 @@
   loop_control:
     label: "{{ item.1 }}"
   when: item.create_reverse_zones is not defined or item.create_reverse_zones
-  notify: reload bind in Docker container
+  #notify: reload bind in Docker container
   tags: bind
