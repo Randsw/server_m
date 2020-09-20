@@ -6,7 +6,22 @@ version: '3'
 
 services:
 
-  # External dependencies
+# Config data provide by ansible role 
+  dns:
+    image: sameersbn/bind:latest
+    restart: unless-stopped
+    container_name: bind
+    volumes:
+     - .:/data
+    ports:
+      - "{{ ansible_default_ipv4.address }}:53/udp"
+      - "{{ ansible_default_ipv4.address }}:53/tcp"
+    environment:
+      WEBMIN_ENABLED: "false"
+    networks:
+      - default
+
+  {# # External dependencies
   redis:
     image: redis:alpine
     restart: always
@@ -120,7 +135,7 @@ services:
     env_file: {{ docker_compose_env }}
     volumes:
       - "/home/{{ ansible_user }}/mailu/data/psql_db:/data"
-      - "/home/{{ ansible_user }}/mailu/data/psql_backup:/backup"
+      - "/home/{{ ansible_user }}/mailu/data/psql_backup:/backup" #}
 
 networks:
   default:
