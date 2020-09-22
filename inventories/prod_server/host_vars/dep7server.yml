@@ -10,29 +10,47 @@ netplan_configuration:
                 gateway4: '192.168.42.229'
                 nameservers:
                     addresses: ["192.168.42.229", "8.8.8.8"]
-                    
-docker_users: dep7admin
-
-#DHCP settings
-def_lease_time: "600"
-max_lease_time: 7200
-subnet: 192.168.1.0
-subnet_net_mask: 255.255.255.0
-start_address: 192.168.1.110
-end_address: 192.168.1.220
-router_address: 192.168.1.1
-dns_address: 192.168.1.1
 
 #ssh config
 sshd_use_pam: "no"
 sshd_password_authentication: "no"
 sshd_challenge_response_authentication: "no"
 sshd_permitroot_login: "no"
+
+#Firewall config
+firewall_allowed_tcp_ports:
+  - "53"   # TCP
+  - "22"   # ssh
+  - "25"   # smtp
+  - "80"   # http
+  - "443"  # https
+  - "25"   # smtp
+  - "465"  # smtps
+  - "587"  # STARTTLS
+  - "110"  # POP3
+  - "995"  # POP3S
+  - "143"  # IMAP
+  - "993"  # IMAPS
+firewall_allowed_udp_ports:
+  - "53"   # dns
+
+                    
+docker_users: dep7admin
+
 #ftp ssl cert
 rsa_cert_file: "/etc/ssl/certs/vsftpd.pem"
 rsa_private_key_file: "/etc/ssl/certs/vsftpd.pem"
 
 # DNS Server settings
+# Main config file
+bind_conf_dir: "/home/{{ ansible_user }}/docker_compose/bind"
+bind_config: "{{ bind_conf_dir }}/etc/named.conf"
+
+# Docker bind path
+bind_zone_dir_docker: "/data/bind/etc"
+bind_dir_docker: "/data/bind"
+bind_log: "{{ bind_dir_docker }}/lib/named.log"
+
 bind_zone_file_mode: '0775'
 bind_allow_query:
   - any
@@ -63,7 +81,7 @@ bind_other_logs:
     versions: 5
     size: 20m
 bind_check_names: "master ignore"
-bind_zone_master_server_ip: "192.168.42.27"
+bind_zone_master_server_ip: "{{ ansible_default_ipv4.address }}"
 bind_zone_minimum_ttl: "2D"
 bind_zone_ttl: "2W"
 bind_zone_time_to_refresh: "2D"
@@ -89,6 +107,12 @@ bind_zone_domains:
       - name: mail
         preference: 10
 
+#Docker-compose settings
+docker_compose_owner: "{{ ansible_user }}"
+docker_compose_owner_group: "{{ ansible_user }}"
+docker_compose_dst: /home/{{ ansible_user }}/
+
+# Not used now
 #Docker compose vars for systemd
 unit_config:
   - name: rocketchat
@@ -106,9 +130,16 @@ unit_config:
     Install:
        WantedBy: multi-user.target
 
-docker_compose_owner: "{{ ansible_user }}"
-docker_compose_owner_group: "{{ ansible_user }}"
-docker_compose_dst: /home/{{ ansible_user }}/
 
 #Prometheus node exporter
 node_exporter_web_listen_address: "{{ ansible_default_ipv4.address }}:9100"
+
+#DHCP settings
+def_lease_time: "600"
+max_lease_time: 7200
+subnet: 192.168.1.0
+subnet_net_mask: 255.255.255.0
+start_address: 192.168.1.110
+end_address: 192.168.1.220
+router_address: 192.168.1.1
+dns_address: 192.168.1.1

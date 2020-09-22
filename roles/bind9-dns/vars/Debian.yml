@@ -12,7 +12,6 @@ bind_default_zone_files:
   - named.conf.default-zones
 
 # Main config file
-#bind_config: "/srv/docker/bind/bind/etc/named.conf"
 bind_conf_dir: "/home/{{ ansible_user }}/docker_compose/bind"
 bind_config: "{{ bind_conf_dir }}/etc/named.conf"
 
@@ -36,4 +35,4 @@ bind_session_keyfile: "/run/named/session.key"
 
 # Custom location for master zone files
 bind_zone_dir: "{{ bind_conf_dir }}/etc"
-bind_slave_dir: "{{ bind_conf_dir }}/slaves"
+bind_slave_dir: "{{ bind_conf_dir }}/etc/slaves"

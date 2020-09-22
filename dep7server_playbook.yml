@@ -8,12 +8,12 @@
     ansible_become_pass: '{{ dep7server_password }}'
 
   roles:
-    #- copy_ssh_key
-    #- geerlingguy.firewall
-    #- set_up_server
+    - copy_ssh_key
+    - geerlingguy.firewall
+    - set_up_server
     - geerlingguy.docker
-    #- set_up_dhcp
-    #- set_up_ftp
+    - set_up_dhcp
+    - set_up_ftp
     - bind9-dns
     - docker-compose_add
 
