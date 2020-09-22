@@ -112,6 +112,25 @@ docker_compose_owner: "{{ ansible_user }}"
 docker_compose_owner_group: "{{ ansible_user }}"
 docker_compose_dst: /home/{{ ansible_user }}/
 
+#Service config
+docker_subnet: 172.19.0.0/16
+# Docker-compose.yml
+keep_logs_day: 2
+chat_admin_name: admin
+chat_admin_pass: changeme
+chat_admin_mail: admin@dep7serverm.com
+elastic_pass   : "changeme"
+gitlab_external_url: 'https://dep7serverm.com/gitlab'
+# Mailu.env
+SECRET_KEY:           6ABWHB8XWHZ6RVDM
+domain:               dep7serverm.com
+hostnames:            mail.dep7serverm.com
+sitename:             dep7serverm
+website:              https://dep7serverm.com
+mail_admin_name:      admin
+mail_admin_mailhost:  dep7serverm.com
+mail_admin_pass:      changeme
+
 # Not used now
 #Docker compose vars for systemd
 unit_config:
