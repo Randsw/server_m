@@ -54,9 +54,11 @@
 
     - name: Install pip
       apt:
-        pkg: ['python3-pip', 'rsync']
+        pkg: ['python3-pip']
         state: present
 
   roles:
     - role: geerlingguy.docker
+    - role: bind9-dns
     - role: docker-compose_add
+

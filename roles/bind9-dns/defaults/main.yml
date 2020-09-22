@@ -1,8 +1,5 @@
 # roles/bind/defaults/main.yml
 ---
-
-bind_log: "{{ bind_dir }}/named.log"
-
 bind_zone_domains:
   - name: "dep7serverm.com"
     hostmaster_email: "randsw@dep7serverm.com"
@@ -76,13 +73,13 @@ bind_zone_file_mode: "0775"
 DNS_path:
   - path: "/home/{{ ansible_user }}/docker_compose/bind"
     mode: "0775"
-    user: systemd-network
+    user: systemd-resolve
     group: systemd-journal
   - path: "/home/{{ ansible_user }}/docker_compose/bind/etc"
     mode: "2775"
-    user: systemd-network
+    user: systemd-resolve
     group: systemd-journal
   - path: "/home/{{ ansible_user }}/docker_compose/bind/lib"
     mode: "0755"
-    user: systemd-network
+    user: systemd-resolve
     group: systemd-journal

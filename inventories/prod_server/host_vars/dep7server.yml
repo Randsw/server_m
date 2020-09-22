@@ -7,9 +7,9 @@ netplan_configuration:
                 dhcp4: no
                 dhcp6: no
                 addresses: ["192.168.42.27/24"]
-                gateway4: '192.168.42.129'
+                gateway4: '192.168.42.229'
                 nameservers:
-                    addresses: ["192.168.42.129", "8.8.8.8"]
+                    addresses: ["192.168.42.229", "8.8.8.8"]
                     
 docker_users: dep7admin
 
@@ -44,26 +44,26 @@ bind_acls:
   - name: acl1
     match_list:
       - 172.17.0.0/16
-      - 192.168.1.0/24
+      - 192.168.42.0/24
 bind_forwarders:
   - '8.8.8.8'
   - '8.8.4.4'
 bind_recursion: false
 bind_query_log: 
-  file: '{{ bind_dir }}/lib/query.log'
+  file: '{{ bind_dir_docker }}/lib/query.log'
   versions: 100
   size: 20m
 bind_other_logs:
   - name: resolver
-    file: '{{ bind_dir }}/lib/auth_servers.log'
+    file: '{{ bind_dir_docker }}/lib/auth_servers.log'
     versions: 50
     size: 20m
   - name: query-errors
-    file: '{{ bind_dir }}/lib/query-errors.log'
+    file: '{{ bind_dir_docker }}/lib/query-errors.log'
     versions: 5
     size: 20m
 bind_check_names: "master ignore"
-bind_zone_master_server_ip: "192.168.1.248"
+bind_zone_master_server_ip: "192.168.42.27"
 bind_zone_minimum_ttl: "2D"
 bind_zone_ttl: "2W"
 bind_zone_time_to_refresh: "2D"

@@ -10,7 +10,7 @@
     group: "{{ bind_group }}"
     mode: "{{ bind_zone_file_mode }}"
     setype: named_conf_t
-  notify: reload bind in Docker container
+#  notify: reload bind in Docker container
   tags: bind
 
 - name: Slave | ensure directory for cached slaves zones

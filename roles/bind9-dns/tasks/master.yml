@@ -91,21 +91,16 @@
   #notify: reload bind in Docker container
   tags: bind
 
-# - name: Master | Default zones files copy
-#   copy:
-#     src: "{{ item }}"
-#     dest: "{{ bind_zone_dir }}/{{ item }}"
-#     owner: "{{ bind_owner }}"
-#     group: "{{ bind_group }}"
-#     mode: "{{ bind_zone_file_mode }}"
-#   with_items:
-#     - db.0
-#     - db.127
-#     - db.255
-#     - db.empty
-#     - db.local
-#     - db.root
-#   tags: bind
+- name: Master | Default zones files copy
+  copy:
+    src: "{{ item }}"
+    dest: "{{ bind_zone_dir }}/{{ item }}"
+    owner: "{{ bind_owner }}"
+    group: "{{ bind_group }}"
+    mode: "{{ bind_zone_file_mode }}"
+  with_items:
+    - db.root
+  tags: bind
 
 - name: Master | Create forward lookup zone file
   template:

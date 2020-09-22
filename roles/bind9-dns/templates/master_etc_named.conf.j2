@@ -93,7 +93,7 @@ logging {
 };
 
 {% for file in bind_default_zone_files %}
-include "{{ file }}";
+include "{{ bind_zone_dir_docker }}/{{ file }}";
 {% endfor %}
 {% for file in bind_extra_include_files %}
 include "{{ file }}";

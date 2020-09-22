@@ -1,6 +1,5 @@
 # roles/bind/vars/Debian.yml
 ---
-
 bind_packages:
   - python-netaddr
   - bind9
@@ -10,7 +9,7 @@ bind_service: bind9
 
 # Localhost zone
 bind_default_zone_files:
-  - files
+  - named.conf.default-zones
 
 # Main config file
 #bind_config: "/srv/docker/bind/bind/etc/named.conf"
@@ -23,10 +22,12 @@ auth_file: "auth_transfer.conf"
 bind_auth_file: "{{ bind_conf_dir }}/{{ auth_file }}"
 
 # Docker bind path
-bind_zone_dir_docker: "/etc/bind"
+bind_zone_dir_docker: "/data/bind/etc"
+bind_dir_docker: "/data/bind"
+bind_log: "{{ bind_dir_docker }}/lib/named.log"
 
 
-bind_owner: systemd-network
+bind_owner: systemd-resolve
 bind_group: systemd-journal
 
 bind_bindkeys_file: "{{ bind_conf_dir }}/etc/named.iscdlv.key"
