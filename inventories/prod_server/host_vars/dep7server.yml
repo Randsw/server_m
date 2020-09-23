@@ -7,9 +7,9 @@ netplan_configuration:
                 dhcp4: no
                 dhcp6: no
                 addresses: ["192.168.42.27/24"]
-                gateway4: '192.168.42.229'
+                gateway4: '192.168.42.129'
                 nameservers:
-                    addresses: ["192.168.42.229", "8.8.8.8"]
+                    addresses: ["192.168.42.129", "8.8.8.8"]
 
 #ssh config
 sshd_use_pam: "no"
@@ -118,17 +118,17 @@ docker_subnet: 172.19.0.0/16
 keep_logs_day: 2
 chat_admin_name: admin
 chat_admin_pass: changeme
-chat_admin_mail: admin@dep7serverm.com
+chat_admin_mail: "admin@dep7serverm.com"
 elastic_pass   : "changeme"
-gitlab_external_url: 'https://dep7serverm.com/gitlab'
+gitlab_external_url: "https://dep7serverm.com/gitlab"
 # Mailu.env
 SECRET_KEY:           6ABWHB8XWHZ6RVDM
-domain:               dep7serverm.com
-hostnames:            mail.dep7serverm.com
+domain:               "dep7serverm.com"
+hostnames:            "mail.dep7serverm.com"
 sitename:             dep7serverm
-website:              https://dep7serverm.com
+website:              "https://dep7serverm.com"
 mail_admin_name:      admin
-mail_admin_mailhost:  dep7serverm.com
+mail_admin_mailhost:  "dep7serverm.com"
 mail_admin_pass:      changeme
 
 # Not used now
