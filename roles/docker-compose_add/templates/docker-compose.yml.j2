@@ -12,8 +12,8 @@ services:
     volumes:
      - ./bind:/data/data
     ports:
-      - "{{ ansible_default_ipv4.address }}:53/udp"
-      - "{{ ansible_default_ipv4.address }}:53/tcp"
+      - "{{ ansible_default_ipv4.address }}:53:53/udp"
+      - "{{ ansible_default_ipv4.address }}:53:53/tcp"
     environment:
       WEBMIN_ENABLED: "false"
     networks:
@@ -318,8 +318,8 @@ services:
       - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/
       - GF_SERVER_SERVER_FROM_SUB_PATH=true
     restart: unless-stopped
-    ports:
-      - 3000:3000
+    expose:
+      - 3000
     networks:
       - server-net
     labels:

@@ -131,6 +131,7 @@ chat_admin_name: admin
 chat_admin_pass: changeme
 chat_admin_mail: "admin@dep7serverm.com"
 elastic_pass   : "changeme"
+ELK_VERISON    : "7.8.0"
 gitlab_external_url: "https://dep7serverm.com/gitlab"
 # Mailu.env
 SECRET_KEY:           6ABWHB8XWHZ6RVDM

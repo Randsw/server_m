@@ -74,6 +74,13 @@
     group: "{{ ansible_user }}"
     mode: '0644'
 
+- name: Create .env file
+  copy:
+    content: "ELK_VERSION={{ ELK_VERISON }}"
+    dest: "{{ compose_dir }}/.env"
+    mode: "0644"
+
+
 - name: Restart docker #https://stackoverflow.com/questions/38087027/docker-compose-stuck-downloading-or-pulling-fs-layer
   service:
     name: docker

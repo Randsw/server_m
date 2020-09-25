@@ -46,3 +46,29 @@ Install fully operational department server with firewall, dns server, mail serv
         * [Admin panel](#admin-panel-conf)
       * [Gitlab](#gitlab-conf)
 5. [Links to services manual](#links-manual)
+
+## Requirements
+
+### Host
+
+* [Docker Engine](https://docs.docker.com/install/) version **17.05** or newer
+* [Docker Compose](https://docs.docker.com/compose/install/) version **1.20.0** or newer
+* 8 GB of RAM
+
+*:information_source: Make sure your user has the [required permissions][linux-postinstall] to interact with the Docker daemon.*
+
+The services exposes the following ports by default:
+
+* 53(udp/tcp): DNS port 
+* 80:          Standart HTTP port
+* 443:         Standart HTTPs port
+* 25:          SMTP port
+* 110:         POP3 port
+* 143:         IMAP port 
+* 465:         SMTPS port
+* 587:         STARTTLS port
+* 993:         IMAPS port
+* 995:         POP3 port
+
+
+[linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
