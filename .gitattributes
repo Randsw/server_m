@@ -5,5 +5,5 @@ roles/docker-compose_add/files/service_conf/mail/nginx/static/*.ico linguist-det
 roles/docker-compose_add/files/service_conf/mail/nginx/static/*.svg linguist-detectable=false
 roles/docker-compose_add/files/service_conf/mail/nginx/static/*.svg linguist-detectable=false
 roles/docker-compose_add/files/service_conf/monitoring/grafana/provisioning/dashboards/*.json linguist-detectable=false
-*.yml linguist-language=YAML
-*.yaml linguist-language=YAML
+*.yml linguist-detectable=true
+*.yaml linguist-detectable=true
