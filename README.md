@@ -94,10 +94,10 @@ The services exposes the following ports by default:
 В файле `inverntories/prod_server/hosts.yml` находятся общие переменные хоста которые нужно задать:
 | Name       | Default Value | Description |
 |------------|---------------|-------------|
-|ansible_host| -             | Host IP address or domain name|
-|ansible_user| -             | OS User     |
-|ansible_ssh_private_key_file| -           | Path to SSH private key
-|ansible_python_interpreter| /usr/bin/python3 | Path to Python3
+|`ansible_host`| -             | Host IP address or domain name|
+|`ansible_user`| -             | OS User     |
+|`ansible_ssh_private_key_file`| -           | Path to SSH private key
+|`ansible_python_interpreter`| /usr/bin/python3 | Path to Python3
 
 В своей работе Ansible использует SSH соединение. По умолчанию настройки SSH сервера хоста позволяеют установить соединение с правами суперпользователя при введении пароля. Такая практика считается небезопасной. Необходимо настроить SSH сервер хоста на отклонение соединения по паролю и с правами суперпользователя и осуществления соединения только по ключу. Для этого в плейбуке `dep7server_playbook` происходит настройка SSH сервера. Публичный ключ находится в папке `roles/copy_ssh_key/files`
 
@@ -152,15 +152,104 @@ ansible-playbook dep7server_playbook.yml -i inventories/prod_server/hosts.yml --
 Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#ssh config**
 | Name       | Default Value | Description |
 |------------|---------------|-------------|
-|sshd_use_pam| no  |  PAM authentication
-|sshd_password_authentication| no | Password_authentication
-|sshd_challenge_response_authentication| no | [RedHat Explanation][RedHat-ssh]
-|sshd_permitroot_login| no | SSH root login
+|`sshd_use_pam`| no  |  PAM authentication
+|`sshd_password_authentication`| no | Password_authentication
+|`sshd_challenge_response_authentication`| no | [RedHat Explanation][RedHat-ssh]
+|`sshd_permitroot_login`| no | SSH root login
 
 ### Iptables Variables
+
 Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#Firewall config**
 | Name       | Default Value | Description |
 |------------|---------------|-------------|
+|`firewall_allowed_tcp_ports`| - | List of allowed input tcp port|
+|`firewall_allowed_udp_ports`| - | List of allowed input udp port|
+
+### Docker Variables
+
+Переменная `docker_users` содержит список имен пользователей от имени которых можно запускать Docker. Подробнее [см.](https://docs.docker.com/engine/install/ubuntu/)
+
+### DHCP Variables
+
+Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#DHCP settings**
+
+| Name       | Default Value | Description |
+|------------|---------------|-------------|
+|`def_lease_time`| 600         | The amount of time in minutes or        seconds a network device can use an IP Address in a network.|
+|`max_lease_time`| 7200         |The maximum lease time defines the longest lease that the server can allocate.|
+|`subnet`        | 192.168.1.0  | DHCP network subnet|
+|`subnet_net_mask`| 255.255.255.0| DHCP network subnet mask|
+|`start_address` | 192.168.1.110| DHCP start address|
+|`end_address`   | 192.168.1.220| DHCP end address|
+|`router_address`| 192.168.1.1  | Getaway address in DHCP network|
+|`dns_address`   | 192.168.1.1  | DNS address in DHCP network|
+
+### FTP Variables
+
+Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#ftp ssl cert**
+
+| Name       | Default Value | Description |
+|------------|---------------|-------------|
+|`rsa_cert_file`:       | -    | path to ftp cert file|
+|`rsa_private_key_file`:| -    | path to ftp private key file|
+
+Список пользователей разделенных по правам доступа находится в зашифрованном с помощью [Ansible Vault][ansible-vault] виде в файле `role/set_up_ftp/var/main.yml` в виде:
+
+```console
+group1:
+  - name: User
+    password: Pass
+    ....
+
+group2:
+  - name: User2
+    password: Pass2
+```
+
+### DNS Variables
+
+Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **# DNS Server settings**
+
+| Name                       | Default Value        | Description |
+|----------------------------|----------------------|-------------|
+|`bind_conf_dir`             | -                    | Path to folder with bind config on *host*|
+|`bind_config`               | -                    | Path to bind config file on *host*
+|`bind_zone_dir_docker`      | -                    | Path to bind zone file in *docker container*|
+|`bind_dir_docker`           | -                    | Path to folder with bind config in *docker container*|
+|`bind_log`                  | -                    | Path to bind log file in *docker container*
+|`bind_zone_file_mode`       | -                    | Zone file permission
+|`bind_allow_query`          | [`any`]              | A list of hosts that are allowed to query this DNS server. Set to ['any'] to allow all hosts
+|`bind_listen_ipv4`          | any                  | Listen ipv4 address
+|`bind_listen_ipv6`          | any                  | Listen ipv6 address
+|`bind_acls`                 | -                    | A list of hosts that are allowed to query this DNS server. Set to ['any'] to allow all hosts
+|`bind_forwarders`           | 8.8.8.8              | A list of name servers to forward DNS requests to.|
+|`bind_recursion`            | no                   | Allow recursion
+|`bind_query_log`            | -                    | A dict with fields file (e.g. data/query.log), versions, size, when defined this will turn on the query log|
+|`bind_other_logs`           | -                    | A list of logging channels to configure, with a separate dict for each domain, with relevant details|
+|`bind_check_names`          | -                    | Check host names for compliance with RFC 952 and RFC 1123 and take the defined action
+|`bind_zone_master_server_ip`| -                    | (Required) The IP address of the master DNS server. If host ip is different that this address DNS server configured as **slave**|
+|`bind_zone_minimum_ttl`     | -                    | Minimum TTL field in the SOA record.
+|`bind_zone_ttl`             | -                    | Time to Live field in the SOA record.
+|`bind_zone_time_to_refresh` | -                    | Time to refresh field in the SOA record.
+|`bind_zone_time_to_retry`   | -                    | Time to retry field in the SOA record.
+|`bind_zone_time_to_expire`  | -                    | Time to expire field in the SOA record.
+|`bind_zone_domains`         | -                    | A list of domains to configure, with a separate dict for each domain, with relevant details|
+| `- allow_update`           | `['none']`           | A list of hosts that are allowed to dynamically update this DNS zone. |
+| `- also_notify`            | -                    | A list of servers that will receive a notification when the master zone file is reloaded.|
+| `- create_forward_zones`   | -                    | When initialized and set to `false`, creation of forward zones will be skipped (resulting in a reverse only zone)|
+| `- create_reverse_zones`   | -                    | When initialized and set to `false`, creation of reverse zones will be skipped (resulting in a forward only zone)|
+| `- delegate`               | `[]`                 | Zone delegation. See below this table for examples.|
+| `- hostmaster_email`       | `hostmaster`         | The e-mail address of the system administrator for the zone|
+| `- hosts`                  | `[]`                 | Host definitions. See below this table for examples.|
+| `- ipv6_networks`          | `[]`                 | A list of the IPv6 networks that are part of the domain, in CIDR notation (e.g. 2001:db8::/48) |
+| `- mail_servers`           | `[]`                 | A list of dicts (with fields `name` and `preference`) specifying the mail servers for this domain.|
+| `- name_servers`           | `[ansible_hostname]` | A list of the DNS servers for this domain.|
+| `- name`                   | `example.com`        | The domain name |
+| `- networks`               | `['10.0.2']`         | A list of the networks that are part of the domain |
+| `- other_name_servers`     | `[]`                 | A list of the DNS servers outside of this domain.|
+| `- services`               | `[]`                 | A list of services to be advertised by SRV records|
+| `- text`                   | `[]`                 | A list of dicts with fields `name` and `text`, specifying TXT records. `text` can be a list or string.|
+| `- naptr`                  | `[]`                 | A list of dicts with fields `name`, `order`, `pref`, `flags`, `service`, `regex` and `replacement` specifying NAPTR records.|
 
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
