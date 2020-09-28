@@ -1,9 +1,10 @@
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.css linguist-detectable=false
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.png linguist-detectable=false
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.xml linguist-detectable=false
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.ico linguist-detectable=false
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.svg linguist-detectable=false
-roles/docker-compose_add/files/service_conf/mail/nginx/static/*.svg linguist-detectable=false
-roles/docker-compose_add/files/service_conf/monitoring/grafana/provisioning/dashboards/*.json linguist-detectable=false
+*.css linguist-detectable=false
+*.png linguist-detectable=false
+*.xml linguist-detectable=false
+*.ico linguist-detectable=false
+*.svg linguist-detectable=false
+*.svg linguist-detectable=false
+*.json linguist-detectable=false
 *.yml linguist-detectable=true
 *.yaml linguist-detectable=true
+*.j2 linguist-detectable=false
