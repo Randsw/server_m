@@ -59,3 +59,27 @@ if "<title>Grafana</title>" in (r.text) \
   print ("Grafana working")
 else:
   print ("Grafana not working")  
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/gitlab', verify=False)
+if "GitLab Community Edition" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Gitlab working")
+else:
+  print ("Gitlab not working")
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/webmail', verify=False)
+if "Welcome to Roundcube Webmail" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Webmail working")
+else:
+  print ("Webmail not working")
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/admin', verify=False)
+if "to access the administration tools" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("MailAdmin working")
+else:
+  print ("MailAdmin not working")
