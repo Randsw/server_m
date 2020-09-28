@@ -122,6 +122,7 @@ bind_zone_domains:
 docker_compose_owner: "{{ ansible_user }}"
 docker_compose_owner_group: "{{ ansible_user }}"
 docker_compose_dst: /home/{{ ansible_user }}/
+compose_dir: /home/{{ ansible_user }}/docker_compose
 
 #Service config
 docker_subnet: 172.19.0.0/16

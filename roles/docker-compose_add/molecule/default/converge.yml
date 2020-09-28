@@ -3,62 +3,18 @@
   hosts: all
   become: yes
   vars:
-    ansible_user: "root"
-    docker_users: "root"
-    bind_zone_file_mode: '0775'
-    bind_allow_query:
-      - any
-    bind_listen_ipv4:
-      - any
-    bind_listen_ipv6:
-      - any
-    bind_acls:
-      - name: acl1
-        match_list:
-          - 172.17.0.0/16
-          - 192.168.1.0/24
-    bind_forwarders:
-      - '8.8.8.8'
-      - '8.8.4.4'
-    bind_recursion: false
-    bind_query_log: "{{ bind_dir }}/named.log"
-    bind_check_names: 'master ignore'
-    bind_zone_master_server_ip: 172.17.0.2
-    bind_zone_minimum_ttl: "2D"
-    bind_zone_ttl: "2W"
-    bind_zone_time_to_refresh: "2D"
-    bind_zone_time_to_retry: "2H"
-    bind_zone_time_to_expire: "2W"
-    bind_zone_domains:
-      - name: 'dep7server.com'
-        networks:
-          - '192.168.1'
-        name_servers:
-          - dep7server.com.
-        hostmaster_email: rand.dep7mail.com
-        hosts:
-          - name: mail
-            ip: 192.168.1.142
-          - name: jenkins
-            ip: 192.168.1.143
-          - name: repo
-            ip: 192.168.1.144
-          - name: "@"
-            ip: 192.168.1.142
-        mail_servers:
-          - name: mail
-            preference: 10
+    ansible_user: root
+    docker_users: root
+
   pre_tasks:
     - name: Update apt cache.
-      apt: update_cache=yes cache_valid_time=600
+      apt: update_cache=yes
 
-    - name: Install pip
+    - name: Install packages
       apt:
-        pkg: ['python3-pip']
+        pkg: ['python3-pip', 'rsync']
         state: present
 
   roles:
     - role: geerlingguy.docker
-    - role: bind9-dns
     - role: docker-compose_add
-

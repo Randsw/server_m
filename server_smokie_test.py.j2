@@ -1,0 +1,61 @@
+#!/usr/bin/python3
+import requests
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/rocketchat', verify=False)
+if "Rocket.Chat" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("RocketChat working")
+else:
+  print ("RocketChat not working")  
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/elastic', verify=False, auth=('elastic', 'changeme'))
+if "You Know, for Search" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Elasticsearch working")
+else:
+  print ("Elasticsearch not working")  
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/kibana', verify=False, auth=('elastic', 'changeme'))
+if "Loading Elastic" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Kibana working")
+else:
+  print ("Kibana not working")  
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/alertmanager', verify=False)
+if "<title>Alertmanager</title>" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Alermanager working")
+else:
+  print ("Alermanager not working")  
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/pushgateway', verify=False)
+if "<title>Prometheus Pushgateway</title>" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Pushgetaway working")
+else:
+  print ("Pushgetaway not working")    
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/prometheus', verify=False)
+if "<title>Prometheus Time Series Collection and Processing Server</title>" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Prometheus working")
+else:
+  print ("Prometheus not working")    
+
+r = requests.get('http://{{ ansible_default_ipv4.address }}/grafana', verify=False)
+if "<title>Grafana</title>" in (r.text) \
+    and r.history[0].status_code == requests.codes.moved_permanently \
+    and r.status_code == requests.codes.ok:
+  print ("Grafana working")
+else:
+  print ("Grafana not working")  

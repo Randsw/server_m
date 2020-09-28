@@ -1,14 +1,6 @@
 ---
 docker_compose_network: "172.19.0.0/24"
 docker_compose_env: docker-compose.env
-mail_server_domain: dep7serverm.com
-mail_server_hostnames: mail.dep7serverm.com
-TLS_FLAVOR: "cert"
-webmail: roundcube
-webdav: radicale
-mail_antivirus: clamav
-mail_sitename: dep7serverm
-mail_website: "https://dep7serverm.com"
 docker_compose_path: /home/{{ ansible_user }}/docker_compose/docker-compose.yml
 docker_compose_env_path: /home/{{ ansible_user }}/docker_compose/mail/mailu.env
 compose_dir: /home/{{ ansible_user }}/docker_compose
@@ -16,6 +8,25 @@ volume_dir: /home/{{ ansible_user }}/mailu
 mail_cert_dir: "{{ compose_dir }}/mail/certs"
 mail_domain: "dep7serverm.com"
 admin_mail_name: "rand"
+#Service config
+docker_subnet: 172.19.0.0/16
+# Docker-compose.yml
+keep_logs_day: 2
+chat_admin_name: admin
+chat_admin_pass: changeme
+chat_admin_mail: "admin@dep7serverm.com"
+elastic_pass: "changeme"
+ELK_VERISON: "7.8.0"
+gitlab_external_url: "https://dep7serverm.com/gitlab"
+# Mailu.env
+SECRET_KEY: 6ABWHB8XWHZ6RVDM
+domain: "dep7serverm.com"
+hostnames: "mail.dep7serverm.com"
+sitename: dep7serverm
+website: "https://dep7serverm.com"
+mail_admin_name: admin
+mail_admin_mailhost: "dep7serverm.com"
+mail_admin_pass: changeme
 
 services_paths:
   - path: "/home/{{ ansible_user }}/docker_compose/monitoring/prometheus"
@@ -27,7 +38,7 @@ services_paths:
   - path: "/home/{{ ansible_user }}/docker_compose/monitoring/grafana/grafana_data"
     mode: "0777"
   - path: "/home/{{ ansible_user }}/docker_compose/mail"
-    mode: "0777"
+    mode: "0755"
   - path: "/home/{{ ansible_user }}/docker_compose/mail/data"
     mode: "0750"
   - path: "/home/{{ ansible_user }}/docker_compose/logging/elasticsearch/data"

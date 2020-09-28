@@ -11,15 +11,18 @@
     state: directory
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-    mode: '0775'
-  changed_when: false # Bug? We create dir with same user:group:mode rules but ansible see idempotence?
+    mode: '0777'
 
 - name: Copy services config files to host
   synchronize:
     src: "service_conf/"
     dest: "{{ compose_dir }}"
-  changed_when: false # Since in this role wee create only dirs, rsync mark this different bun don't del new dirs
+    rsync_opts:
+      - "--no-perms"
+      - "--no-owner"
+      - "--no-group"
   become: no
+  changed_when: false # Since in this role wee create only dirs, rsync mark this different bun don't del new dirs
 
 - name: create dir for docker persistent data
   file:
@@ -29,6 +32,7 @@
     group: "{{ ansible_user }}"
     mode: "{{ item.mode }}"
   loop: "{{ services_paths }}"
+  become: yes
 
 - name: Create a directory for mail certs
   file:
@@ -36,7 +40,7 @@
     state: directory
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-    mode: '0755'
+    mode: '0750'
 
 - name: Copy file with owner and permissions
   copy:
@@ -44,7 +48,7 @@
     dest: "{{ mail_cert_dir }}/{{ item }}"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
-    mode: '0755'
+    mode: '0750'
   with_items:
     - cert.pem
     - key.pem
@@ -79,8 +83,7 @@
     content: "ELK_VERSION={{ ELK_VERISON }}"
     dest: "{{ compose_dir }}/.env"
     mode: "0644"
-
-
+    
 - name: Restart docker #https://stackoverflow.com/questions/38087027/docker-compose-stuck-downloading-or-pulling-fs-layer
   service:
     name: docker
@@ -91,3 +94,4 @@
   docker_compose:
     project_src: "{{ compose_dir }}"
     build: yes
+  tags: service_deploy

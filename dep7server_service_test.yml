@@ -1,0 +1,26 @@
+- hosts: dep7server
+  become: yes
+
+  vars_files:
+    #- ~/VSCode/ansible/dep7server_m/dep7server_vault.yml 
+    - ~/work/ansible/server_m/dep7server_vault.yml
+  vars:
+    ansible_become_pass: '{{ dep7server_password }}'
+  
+  pre_tasks:
+    - name: Install python requests
+      pip:
+        name:
+         - requests
+      
+  tasks:
+    - name: Copy template python test file
+      template:
+        src: "server_smokie_test.py.j2"
+        dest: "{{ compose_dir }}/server_smokie_test.py"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: '0775'
+
+    - name: Run python server test script
+      command: "{{ compose_dir }}/server_smokie_test.py"

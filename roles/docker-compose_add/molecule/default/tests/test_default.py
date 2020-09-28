@@ -45,63 +45,63 @@ def test_redis_container_is_running(host):
     redis = host.docker("mail_redis")
     assert redis.is_running
 
-def test_redis_container_is_running(host):
+def test_front_container_is_running(host):
     front = host.docker("front")
     assert front.is_running
 
-def test_webmail_container_is_running(host):
+def test_bind_container_is_running(host):
     bind = host.docker("bind")
     assert bind.is_running
 
-def test_smtp_container_is_running(host):
+def test_elasticsearch_container_is_running(host):
     elasticsearch = host.docker("elasticsearch")
     assert elasticsearch.is_running
 
-def test_imap_container_is_running(host):
+def test_kibana_container_is_running(host):
     kibana = host.docker("kibana")
     assert kibana.is_running
 
-def test_antispam_container_is_running(host):
+def test_fluentd_container_is_running(host):
     fluentd = host.docker("fluentd")
     assert fluentd.is_running
 
-def test_admin_container_is_running(host):
+def test_curator_container_is_running(host):
     curator = host.docker("curator")
     assert curator.is_running
 
-def test_webdav_container_is_running(host):
+def test_rocketchat_container_is_running(host):
     rocketchat = host.docker("rocketchat")
     assert rocketchat.is_running
 
-def test_database_container_is_running(host):
+def test_mongo_container_is_running(host):
     mongo = host.docker("mongo")
     assert mongo.is_running
 
-def test_fetchmail_container_is_running(host):
+def test_prometheus_container_is_running(host):
     prometheus = host.docker("prometheus")
     assert prometheus.is_running
 
-def test_antivirus_container_is_running(host):
+def test_alertmanager_container_is_running(host):
     alertmanager = host.docker("alertmanager")
     assert alertmanager.is_running
 
-def test_redis_container_is_running(host):
+def test_nodeexporter_container_is_running(host):
     nodeexporter = host.docker("nodeexporter")
     assert nodeexporter.is_running
 
-def test_admin_container_is_running(host):
+def test_cadvisor_container_is_running(host):
     cadvisor = host.docker("cadvisor")
     assert cadvisor.is_running
 
-def test_webdav_container_is_running(host):
+def test_grafana_container_is_running(host):
     grafana = host.docker("grafana")
     assert grafana.is_running
 
-def test_database_container_is_running(host):
+def test_pushgateway_container_is_running(host):
     pushgateway = host.docker("pushgateway")
     assert pushgateway.is_running
 
-def test_fetchmail_container_is_running(host):
+def test_gitlab_container_is_running(host):
     gitlab = host.docker("gitlab")
     assert gitlab.is_running
 
@@ -144,7 +144,7 @@ def test_compose_config_dir_exist(host):
     assert oct(prometheus_data_dir.mode) == '0o777'
     mail_dir = host.file('/home/root/docker_compose/mail')
     assert mail_dir.exists
-    assert oct(mail_dir.mode) == '0o777'
+    assert oct(mail_dir.mode) == '0o755'
     mail_data_dir = host.file('/home/root/docker_compose/mail/data')
     assert mail_data_dir.exists
     assert oct(mail_data_dir.mode) == '0o750'
