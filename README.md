@@ -251,6 +251,35 @@ group2:
 | `- text`                   | `[]`                 | A list of dicts with fields `name` and `text`, specifying TXT records. `text` can be a list or string.|
 | `- naptr`                  | `[]`                 | A list of dicts with fields `name`, `order`, `pref`, `flags`, `service`, `regex` and `replacement` specifying NAPTR records.|
 
+### Service deploy Variables
+
+Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#Service config**
+
+| Name                       | Default Value        | Description |
+|----------------------------|----------------------|-------------|
+|`docker_subnet`             | 172.19.0.0/16        | Subnet used for docker containers |
+|`keep_logs_day`             | 2                    | A number of days to keep logs |
+|`chat_admin_name`           | admin                | Rocketchat admin name|
+|`chat_admin_pass`           | changeme             | Rocketchat admin password|
+|`chat_admin_mail`           | -                    | Rocketchat admin email|
+|`elastic_pass`              | changeme             | Elasticsearch password -user - 'elastic'|
+|`ELK_VERISON`               | 7.8.0                | ELK/EFK stack version|
+|`gitlab_external_url`       | -                    | Gitlab external URL|
+|`SECRET_KEY`                |                      | Mail server Secret Key. Must be change at every setup and randomly generated|
+|`domain`                    | -                    | Mail domain
+|`hostnames`                 | -                    | Mail server hostname
+|`sitename`                  | -                    | Sitename - Displayed at admin panel
+|`website`                   | -                    | Website - Displayed at admin panel
+|`mail_admin_name`           | -                    | mail admin name - first part of email **example**@example.com
+|`mail_admin_mailhost`       | -                    | mail admin mail domain - second part of email example@**example.com**
+|`mail_admin_pass`           | -                    | mail admin password
+
+## Services configuration definition
+
+### FTP Config
+
+FTP сервер сконфигурирован для работы в пассивном режиме. Доступ по имени пользователя и паролю.
+
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
 [netplan-config]: https://netplan.io/examples/
