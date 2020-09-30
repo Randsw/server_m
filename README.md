@@ -7,47 +7,47 @@ Install fully operational department server with firewall, dns server, mail serv
 ## Contents
 
 1. [Requirements](#requirements)
-   * [Host](#host-setup)
+   * [Host](#host)
    * [Ansible](#ansible)
    * [Docker](#docker)
 2. [General principles](#general-principles)
-   * [Configure](#configure-principles)
-   * [Deploy](#deploy-principles)
+   * [Configure](#configure)
+   * [Deploy](#deploy)
 3. [Usage](#usage)
    * [Network setup](#network-setup)
-   * [Services-deploy](#services-deploy)
+   * [Services deploy](#services-deploy)
 4. [Variables](#configuration)
    * [Host Variables](#host-variables)
-   * [Network Variables](#network-vars)
-   * [SSH Variables](#ssh-vars)
-   * [Iptables Variables](#iptables-var)
-   * [Docker Variables](#docker-vars)
-   * [DHCP Variables](#dhcp-vars)
-   * [Ftp Variables](#ftp-vars)
-   * [DNS Variables](#dns-vars)
-   * [Services deploy Variables](#services-deploy-vars)
+   * [Network Variables](#network-variables)
+   * [SSH Variables](#ssh-variables)
+   * [Iptables Variables](#iptables-variables)
+   * [Docker Variables](#docker-variables)
+   * [DHCP Variables](#dhcp-variables)
+   * [Ftp Variables](#ftp-variables)
+   * [DNS Variables](#dns-variables)
+   * [Services deploy Variables](#services-deploy-variables)
 5. [Services configuration definition](#services-configuration-definition)
-   * [FTP Config](#ftp-conf)
-   * [DHCP Config](#dhcp-conf)
-   * [DNS Config](#dns-conf)
-   * [Services Config](#service-conf)
-      * [EFK - Logging](#efk-conf)
-        * [Elasticsearch](#elasticsearch-conf)
-        * [Fluentd](#fluentd-conf)
-        * [Kibana](#kibana-conf)
-        * [Curator](#curator-conf)
-      * [Rocketchat](#rocketchat-conf)
-      * [Monitoring](#monitoring-conf)
-        * [Prometheus](#prometheus-conf)
-        * [Grafana](#grafana-conf)
-        * [Alertmanager](#alertmanager-conf)
-        * [Node exporter](#node-exporter-conf)
-        * [Cadvisor](#cadvisor-conf)
-      * [Mail](#mail-conf)
+   * [FTP Config](#ftp-config)
+   * [DHCP Config](#dhcp-config)
+   * [DNS Config](#dns-config)
+   * [Services Config](#service-config)
+      * [EFK - Logging](#efk-logging)
+        * [Elasticsearch](#elasticsearch)
+        * [Fluentd](#fluentd)
+        * [Kibana](#kibana)
+        * [Curator](#curator)
+      * [Rocketchat](#rocketchat)
+      * [Monitoring](#monitoring)
+        * [Prometheus](#prometheus)
+        * [Grafana](#grafana)
+        * [Alertmanager](#alertmanager)
+        * [Node exporter](#node-exporter)
+        * [Cadvisor](#cadvisor)
+      * [Mail](#mail)
         * [Nginx - Reverse Proxy](#nginx-reverse-proxy)
-        * [Admin panel](#admin-panel-conf)
-      * [Gitlab](#gitlab-conf)
-6. [Links to services manual](#links-manual)
+        * [Admin panel](#admin-panel)
+      * [Gitlab](#gitlab)
+6. [Links to services manual](#links-to-services-manual)
 
 ## Requirements
 
@@ -126,7 +126,7 @@ The services exposes the following ports by default:
 ansible-playbook dep7server_prepare.yml -i inventories/prod_server/hosts.yml --ask-pass --ask-vault-pass
 ```
 
-### Service deploy
+### Services deploy
 
 Развертывание сервисов производится при выполнение плейбука `dep7server_playbook`.
 
@@ -141,11 +141,11 @@ ansible-playbook dep7server_playbook.yml -i inventories/prod_server/hosts.yml --
 
 ### Host Variables
 
-[См. выше](#configure-principles)
+[См. выше](#configure)
 
 ### Network Variables
 
-[См. выше](#configure-principles)
+[См. выше](#configure)
 
 ### SSH Variables
 
@@ -283,12 +283,19 @@ FTP сервер сконфигурирован для работы в пасс�
 
 ### DHCP Config
 
-[См. выше](#dhcp-vars)
+[См. выше](#dhcp-variables)
 
 ### DNS Config
 
-В качестве DNS сервера используется контейнер с установленным внутри BIND9.  Конфигурационные файлы располагаются в папке `bind/etc`. В папке `bind/lib` расположен кэш и файлы логов. Также логи выводятся в стандартный вывод контейнера, откуда их собирает для анализа EFK стек. Файл конфигурации, а также файлы прямой и обратной зоны генерятся Ansible автоматически исходя из [заданных переменных](#dns-vars).
+В качестве DNS сервера используется контейнер с установленным внутри BIND9.  Конфигурационные файлы располагаются в папке `bind/etc`. В папке `bind/lib` расположен кэш и файлы логов. Также логи выводятся в стандартный вывод контейнера, откуда их собирает для анализа EFK стек. Файл конфигурации, а также файлы прямой и обратной зоны генерятся Ansible автоматически исходя из [заданных переменных](#dns-variables). Описание работы и способов конфигурации DNS сервера BIND9 можно прочитать на официальном сайте <https://bind9.readthedocs.io/en/latest/>
 
+### Services Config
+
+#### EFK - Logging
+
+##### Elasticsearch
+
+Elasticsearch - это симбиоз NoSQL базы данных с поисковой системой на базе полнотекстового поиска Lucene с возможностью распредленного размещения. Основное применение - это хранение, агреггирование и индексации журнала сообщений. Сообщения журналируются как от хоста, так и от всех Docker контейнеров.
 
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
