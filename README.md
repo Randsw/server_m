@@ -30,12 +30,12 @@ Install fully operational department server with firewall, dns server, mail serv
    * [FTP Config](#ftp-config)
    * [DHCP Config](#dhcp-config)
    * [DNS Config](#dns-config)
-   * [Services Config](#service-config)
+   * [Services Config](#services-config)
       * [EFK - Logging](#efk-logging)
         * [Elasticsearch](#elasticsearch)
+        * [Curator](#curator)
         * [Fluentd](#fluentd)
         * [Kibana](#kibana)
-        * [Curator](#curator)
       * [Rocketchat](#rocketchat)
       * [Monitoring](#monitoring)
         * [Prometheus](#prometheus)
@@ -296,8 +296,16 @@ FTP сервер сконфигурирован для работы в пасс�
 ##### Elasticsearch
 
 Elasticsearch - это симбиоз NoSQL базы данных с поисковой системой на базе полнотекстового поиска Lucene с возможностью распредленного размещения. Основное применение - это хранение, агреггирование и индексации журнала сообщений. Сообщения журналируются как от хоста, так и от всех Docker контейнеров.
+Elasticsearch не удаляет данные, поэтому для удаления устаревших логов используется контейнер [curator](#curator), который удаляет логи через заданное количество дней.
+По умолчанию Elasticsearch ожидает данные по адресу <http://elasticsearch:9200> в сети Docker. В файле конфигурации `roles/docker-compose_add/files/service_conf/logging/elasticsearch/config/elasticsearch.yml` можно задать имя кластера и адрес на котором Elasticsearch будет ожидать логи.
+Собирается контейнер Elasticsearch с помощью *Dockerfile* `roles/docker-compose_add/files/service_conf/logging/elasticsearch/Dockerfile`. По умолчанию берется базовый официальный образ. При желании можно добавить нужные плагины.
+
+##### Curator
+
+Curator применяется для удаления индексов Elasticsearch. Контейнер с Curator собирается на базе образа Alpine 3.8. Конфигурируется подключения к Elasticsearch в файле настроек `roles/docker-compose_add/files/service_conf/logging/extensions/curator/config/curator.yml`. Настраивается название контейнера с Elasticsearch, порт а также способ авторизации. В файле `roles/docker-compose_add/files/service_conf/logging/extensions/curator/config/delete_log_files_curator.yml` расположены правила удаления индексов. В разделе `filters` описывается правила удаления индексов - в первом разделе указывается паттерн поиска по регулярным выражения названия индекса для удаления, во втором разделе указываются временные единицы от выбранных событий(в данном случае дата создания - creation date), тип единиц(в данном случае дни) и их количество. Все индексы старше выбранного значения будут удалены. Подробнее о конфигурации Curator можно прочитать в [документации][curator-doc]
 
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
 [netplan-config]: https://netplan.io/examples/
 [RedHat-ssh]: https://access.redhat.com/solutions/336773
+[curator-doc]: https://www.elastic.co/guide/en/elasticsearch/client/curator/5.8/index.html
