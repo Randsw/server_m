@@ -6,10 +6,10 @@ netplan_configuration:
             eth0:
                 dhcp4: no
                 dhcp6: no
-                addresses: ["192.168.42.27/24"]
-                gateway4: '192.168.42.129'
+                addresses: ["192.168.1.246/24"]
+                gateway4: '192.168.1.1'
                 nameservers:
-                    addresses: ["192.168.42.129", "8.8.8.8"]
+                    addresses: ["192.168.1.1", "8.8.8.8"]
 
 #ssh config
 sshd_use_pam: "no"
@@ -73,7 +73,7 @@ bind_acls:
   - name: acl1
     match_list:
       - 172.17.0.0/16
-      - 192.168.42.0/24
+      - 192.168.1.0/24
 bind_forwarders:
   - '8.8.8.8'
   - '8.8.4.4'
@@ -133,7 +133,7 @@ chat_admin_pass: changeme
 chat_admin_mail: "admin@dep7serverm.com"
 elastic_pass   : "changeme"
 ELK_VERISON    : "7.8.0"
-gitlab_external_url: "https://dep7serverm.com/gitlab"
+gitlab_external_url: "\"https://192.168.1.246/gitlab\""
 # Mailu.env
 SECRET_KEY:           6ABWHB8XWHZ6RVDM
 domain:               "dep7serverm.com"

@@ -23,3 +23,4 @@
     line: "*.*\ @{{ fluentd_address | default(127.0.0.1) }}:\
           {{ fluentd_port | default(5140) }};RSYSLOG_SyslogProtocol23Format"
     mode: "0644"
+  notify: restart rsyslog

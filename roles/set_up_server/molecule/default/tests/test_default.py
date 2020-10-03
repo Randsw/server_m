@@ -34,3 +34,6 @@ def test_rsyslog_config(host):
     rsyslog_conf = host.file('/etc/rsyslog.d/50-default.conf')
     assert rsyslog_conf.exists
     assert rsyslog_conf.contains('*.* @127.0.0.1:5140;RSYSLOG_SyslogProtocol23Format')
+
+def test_rsyslog_working(host):
+    assert host.service('rsyslog').is_running

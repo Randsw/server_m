@@ -2,8 +2,8 @@
   become: yes
 
   vars_files:
-    #- ~/VSCode/ansible/dep7server_m/dep7server_vault.yml 
-    - ~/work/ansible/server_m/dep7server_vault.yml
+    - ~/VSCode/ansible/dep7server_m/dep7server_vault.yml 
+    #- ~/work/ansible/server_m/dep7server_vault.yml
   vars:
     ansible_become_pass: '{{ dep7server_password }}'
   
