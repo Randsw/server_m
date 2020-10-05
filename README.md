@@ -10,13 +10,14 @@ Install fully operational department server with firewall, dns server, mail serv
    * [Host](#host)
    * [Ansible](#ansible)
    * [Docker](#docker)
-2. [General principles](#general-principles)
+2. [Server overview](#server-overview)
+3. [General principles](#general-principles)
    * [Configure](#configure)
    * [Deploy](#deploy)
-3. [Usage](#usage)
+4. [Usage](#usage)
    * [Network setup](#network-setup)
    * [Services deploy](#services-deploy)
-4. [Variables](#configuration)
+5. [Variables](#configuration)
    * [Host Variables](#host-variables)
    * [Network Variables](#network-variables)
    * [SSH Variables](#ssh-variables)
@@ -26,7 +27,7 @@ Install fully operational department server with firewall, dns server, mail serv
    * [Ftp Variables](#ftp-variables)
    * [DNS Variables](#dns-variables)
    * [Services deploy Variables](#services-deploy-variables)
-5. [Services configuration definition](#services-configuration-definition)
+6. [Services configuration definition](#services-configuration-definition)
    * [FTP Config](#ftp-config)
    * [DHCP Config](#dhcp-config)
    * [DNS Config](#dns-config)
@@ -44,10 +45,14 @@ Install fully operational department server with firewall, dns server, mail serv
         * [Node exporter](#node-exporter)
         * [Cadvisor](#cadvisor)
       * [Mail](#mail)
-        * [Nginx - Reverse Proxy](#nginx-reverse-proxy)
         * [Admin panel](#admin-panel)
+        * [Nginx - Reverse Proxy](#nginx-reverse-proxy)
       * [Gitlab](#gitlab)
-6. [Links to services manual](#links-to-services-manual)
+7. [Services integration](#services-integration)
+   * [Gitlab - Mail](#gitlab-mail)
+   * [Gitlab - Rocketchat](#gitlab-rocketchat)
+   * [Alertmanager - Rocketchart](#alertmanager-rocketchat)
+8. [Links to services manual](#links-to-services-manual)
 
 ## Requirements
 
@@ -320,18 +325,94 @@ Curator применяется для удаления индексов **Elasti
 **Kibana** применяется для анализа и визуализации логов хранимых в **Elasticsearch**. В файле конфигурации `roles/docker-compose_add/files/service_conf/logging/kibana/config/kibana.yml` указываются параметры подключения к **Elasticsearch**. Собирается контейнер **Kibana** с помощью *Dockerfile* `roles/docker-compose_add/files/service_conf/logging/Kibana/Dockerfile`. Особое внимание стоит обратить на параметр `server.basePath` - в нашем случае **Kibana** находится за обратным прокси и требуется указать новый URI.
 По умолчанию берется базовый официальный образ. При желании можно добавить нужные плагины. Подробнее о создании дашбордов можно узнать из [официальной документации][kibana-doc]
 
-#### Rocketchat Prometheus Grafana - 1 day
+#### Rocketchat
 
-Cadvisor, Nodexporter, Pushgateway - 1 day
+**Rocketchat** - средство коммуникации и получения оповещений. Оповещения можно получать при действиях в репозитории Gitlab, при событиях в Alertmanager. Логин доступа к административной панели - `admin`. Пароль `changeme`. Подробнее о настройке **Rocketchat** можно узнать из [официальной документации][chat-doc].
 
-mail, nginx, admin - 1 day
+#### Monitoring
+
+##### Prometheus
+
+**Prometheus** - система сбора временных метрик по типу pull. Через заданные промежутки времени она считывает метрики из заданных точек. Основная конфигурация находится в файле `roles/docker-compose_add/files/service_conf/monitoring/prometheus/prometheus.yml`. В настройках можно задать время опроса, файл настроек оповещений, точки сбора данных, а также способ соединения с менеджером оповещения **Alertmanager**. В нашем случае **Prometheus** получает данные из 4 источников
+
+* **NodeExporter** - собирает метрики с ПК хоста. Работает в контейнере
+* **Cadvisor** - собирает метрики со всех запущенных контейнеров. Работает также в контейнере.
+* **Prometheus** - собирает метрики самого себя
+* **Pushgateway** - применяется для получения коротко живущих сообщений которые могут не попасть в интервал сбора метрик. Работает в контейнере. Пока не получает никаких данных. Оставлен на будущее.
+
+В файле `roles/docker-compose_add/files/service_conf/monitoring/prometheus/alert.rules` задаются параметры и их пределы для создания оповещений. По умолчанию прописаны:
+
+* Неработоспособность сервиса мониторинга более 30 секунд
+* Высокая нагрузка на процессор хоста - > 1.5
+* Количество свободной оперативной памяти меньше 15 %
+* Количество свободного места на жестком диске меньше 15%
+* Тестовые примеры мониторинга параметров несуществующего контейнера Jenkins. Всегда срабатывают, оставлены для тестирования и примера.
+
+Подробнее о настройке **Prometheus** можно узнать из [официальной документации][prometheus-doc].
+
+##### Grafana
+
+**Grafana** - система визуализации и анализа метрик собранных с помощью **Prometheus**. Настройки источника данных находятся в файле `roles/docker-compose_add/files/service_conf/monitoring/grafana/provisioning/datasources/datasource.yml`
+В папке `roles/docker-compose_add/files/service_conf/monitoring/grafana/provisioning/dashboards` находятся примеры дашбоардов для визуализации метрик хоста и докер контейнеров. Эти файлы автоматически подхватываюся **Grafana**. Логин и пароль по умолчанию - `admin`.
+
+Подробнее о настройке **Grafana** можно узнать из [официальной документации][grafana-doc].
+
+##### Cadvisor
+
+**Cadvisor** - система сбора метрик с запущенных контейнеров. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
+Получает метрики контейнеров с хоста.
+
+##### Nodexporter
+
+**Nodexporter** - система сбора метрик с хоста. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
+Получает метрики непосребственно из ОС хоста.
+
+##### Pushgateway
+
+**Pushgateway** - ПО сбора коротко живущих метрик. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
+Пока не используется.
+
+#### Mail
+
+##### Admin panel
+
+В качестве почтового сервера используется сборка **Mailu** построенная на контейнерах **Docker**. Основные настройки представлены в файле `roles/docker-compose_add/templates/mailu.env.j2`. Задаются почтовый домен, имя администратора, его почта и пароль. Включение и отключение модулей антивирус, антиспам. По умолчанию имя администратора - `admin`, e-mail - `admin@dep7serverm.com` , пароль - `changeme`.
+
+##### Nginx - Reverse Proxy
+
+В качестве обратного прокси для всего сервера используется **NGINX** входящий в состав сборки почтового сервера **Mailu**. Связь с внешним миром осуществляется с помощью протокола HTTPS, во внутренней сети действует протокол HTTP. Все сервисы доступны по FQDN сервера плюс соответсвующий URI
+
+* `/rocketchat`
+* `/kibana`
+* `/elastic`
+* `/prometheus`
+* `/grafana`
+* `/alertmanager`
+* `/pushgetaway`
+* `/admin`
+* `/gitlab`
+
+Подробнее о настройке **NGINX** можно узнать из [официальной документации][nginx-doc].
+
+#### Gitlab
+
+**Gitlab** - система контроля версий и CI/CD инструмент. При первом заходе предлагается создать пароль администратора с логином root. Основные настройки находятся в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`. Указывается внешний URL, настраивается доступ по HTTP([см. выше](#nginx-reverse-proxy)), задаются подключения к почтовому сервису для получения оповещений, отключаются сервисы, для которых есть уже альтернатива, а также отключается получения сертификата Let's Encrypt.
+
+Подробнее о настройке **Gitlab** можно узнать из [официальной документации][gitlab-doc].
 
 System overview + schema - 2 days
+
+Integration - 1 day. rewrite from copy book
 
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
 [netplan-config]: https://netplan.io/examples/
 [RedHat-ssh]: https://access.redhat.com/solutions/336773
 [curator-doc]: https://www.elastic.co/guide/en/elasticsearch/client/curator/5.8/index.html
-[fluentd-doc]: https://
-[kibana-doc]: https://
+[fluentd-doc]: https://docs.fluentd.org/
+[kibana-doc]: https://www.elastic.co/kibana
+[chat-doc]: https://docs.rocket.chat/?gclid=EAIaIQobChMIiNuQ8eaa7AIVCLLtCh3y8QhfEAAYASAAEgIGx_D_BwE
+[prometheus-doc]: https://prometheus.io/docs/introduction/overview/
+[grafana-doc]: https://grafana.com/grafana/
+[nginx-doc]: https://nginx.org/ru/docs/
+[gitlab-doc]: https://docs.gitlab.com/
