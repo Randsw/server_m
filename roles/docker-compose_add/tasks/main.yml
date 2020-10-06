@@ -5,10 +5,6 @@
       - docker
       - docker-compose
 
-- name: Run Docker without root privileges with out restart
-  command: newgrp docker 
-  changed_when: false
-
 - name: Create a directory for compose
   file:
     path: "{{ compose_dir }}"
