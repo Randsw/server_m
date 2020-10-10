@@ -17,16 +17,16 @@ Install fully operational department server with firewall, dns server, mail serv
 4. [Usage](#usage)
    * [Network setup](#network-setup)
    * [Services deploy](#services-deploy)
-5. [Variables](#configuration)
+5. [Variables](#variables)
    * [Host Variables](#host-variables)
    * [Network Variables](#network-variables)
    * [SSH Variables](#ssh-variables)
    * [Iptables Variables](#iptables-variables)
    * [Docker Variables](#docker-variables)
    * [DHCP Variables](#dhcp-variables)
-   * [Ftp Variables](#ftp-variables)
+   * [FTP Variables](#ftp-variables)
    * [DNS Variables](#dns-variables)
-   * [Services deploy Variables](#services-deploy-variables)
+   * [Services deploy variables](#services-deploy-variables)
 6. [Services configuration definition](#services-configuration-definition)
    * [FTP Config](#ftp-config)
    * [DHCP Config](#dhcp-config)
@@ -42,7 +42,7 @@ Install fully operational department server with firewall, dns server, mail serv
         * [Prometheus](#prometheus)
         * [Grafana](#grafana)
         * [Alertmanager](#alertmanager)
-        * [Node exporter](#node-exporter)
+        * [NodeExporter](#nodeexporter)
         * [Cadvisor](#cadvisor)
       * [Mail](#mail)
         * [Admin panel](#admin-panel)
@@ -51,7 +51,7 @@ Install fully operational department server with firewall, dns server, mail serv
 7. [Services integration](#services-integration)
    * [Gitlab - Mail](#gitlab-mail)
    * [Gitlab - Rocketchat](#gitlab-rocketchat)
-   * [Alertmanager - Rocketchart](#alertmanager-rocketchat)
+   * [Alertmanager - Rocketchat](#alertmanager-rocketchat)
 8. [Links to services manual](#links-to-services-manual)
 
 ## Requirements
@@ -87,8 +87,6 @@ The services exposes the following ports by default:
 
 ## System Overview
 
-## General Principles
-
 Схема сервера представлена снизу на рисунке:
 ![Services](servermap.jpg)
 Все сервисы, кроме **Rsyslog**, **FTP** и **DHCP** развернуты в контейнерах Docker. Присутствует 5 логических блоков сервисов:
@@ -104,6 +102,8 @@ The services exposes the following ports by default:
 Почтовый сервис позволяет организовать обмен сообщениями электронной почты, а также получать оповещения о событиях внутри сервера. Подробнее смотри [далее](#mail).
 
 Все сервисы, общающиеся со внешним миром по протоколам HTTP/HTTPS, находятся за обратным прокси-сервером, который отвечает за инкапсуляцию сервисов от внешней сети и снятия протокола шифрования TLS. Во внутренней сети для ускорения обмена все коммуникации используют нешифрованное соединение.
+
+## General Principles
 
 ### Configure
 
@@ -274,7 +274,7 @@ group2:
 | `- text`                   | `[]`                 | A list of dicts with fields `name` and `text`, specifying TXT records. `text` can be a list or string.|
 | `- naptr`                  | `[]`                 | A list of dicts with fields `name`, `order`, `pref`, `flags`, `service`, `regex` and `replacement` specifying NAPTR records.|
 
-### Service deploy Variables
+### Services deploy variables
 
 Находятся в файле `inventories/prod_server/host_vars/dep7server.yml` в разделе **#Service config**
 
@@ -380,9 +380,9 @@ Curator применяется для удаления индексов **Elasti
 **Cadvisor** - система сбора метрик с запущенных контейнеров. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
 Получает метрики контейнеров с хоста.
 
-##### Nodexporter
+##### NodeExporter
 
-**Nodexporter** - система сбора метрик с хоста. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
+**NodeExporter** - система сбора метрик с хоста. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
 Получает метрики непосребственно из ОС хоста.
 
 ##### Pushgateway
@@ -418,9 +418,27 @@ Curator применяется для удаления индексов **Elasti
 
 Подробнее о настройке **Gitlab** можно узнать из [официальной документации][gitlab-doc].
 
-System overview - 2 days
+## Services integration
 
-Integration - 1 day. rewrite from copy book
+### Gitlab - Mail
+
+* Create mail user `gitlab@dep7serverm.com`(or that you defined in gitlab section in `roles/docker-compose_add/templates/docker-compose.yml.j2`) with default password `changeme` (or that defined in gitlab section in `roles/docker-compose_add/templates/docker-compose.yml.j2`)
+
+* Enable **Emails on Push** in Gitlab Web (Project -> Settings -> Integration -> Emails on Push). In **recipient** section enter recipient email.
+
+### Gitlab - Rocketchat
+
+* In Rocketchat create incoming Webhook(Administration -> Integrations -> Incoming -> New)
+
+* Enter `#channel` or `@user`. Enter "Post as" user. Better to select `rocket.chat` or create `gitlab` user. Enable **Webhook** and **script**. Copy-paste JS script from [RocketChat documentation][chat-gitlab] and press "Save". Select webhook URL and copy to clipboard. In Gitlab Web open your project, go to **Setting** -> **Webhook**. Create Webhook. To enable webhook to localhost and internal network in Gitlab Web go to **Administration** -> **Setting** -> **Networks** -> **Outbound requests** and check **Allow requests to local network from webhooks and services**
+Enter copied URL from RocketChat. Replace `https` with `http` and URL (`dep7serverm.com/rocketchat`) with `rocketchat:3000`(URL must be like `https://rocketchat:3000/rocketchat/hooks......`). Disable ***SSL Verification**. Your message will be travel only in internal docker network so we dont need TLS encryption. Save and test it.
+
+### Alertmanager - Rocketchat
+
+* Create channel or user or use existing one in RocketChat. Create Incoming Webhook. Enter JS script [from this repos][chat-alertmngr]. In Alertmanager config in **receiver** section enter Webhook URL like in [Gitlab Intergration](#gitlab-rocketchat). Wait for incoming alertt. All message will be tranfered in internal wetwork. No TLS needed.
+
+
+ALERTMANAGER DOCS!!!!!!
 
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
@@ -434,3 +452,5 @@ Integration - 1 day. rewrite from copy book
 [grafana-doc]: https://grafana.com/grafana/
 [nginx-doc]: https://nginx.org/ru/docs/
 [gitlab-doc]: https://docs.gitlab.com/
+[chat-gitlab]: https://docs.rocket.chat/guides/administrator-guides/integrations/gitlab
+[chat-alertmngr]: https://docs.rocket.chat/guides/administrator-guides/integrations/prometheus
