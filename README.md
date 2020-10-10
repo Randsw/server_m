@@ -341,7 +341,7 @@ Curator применяется для удаления индексов **Elasti
 ##### Kibana
 
 **Kibana** применяется для анализа и визуализации логов хранимых в **Elasticsearch**. В файле конфигурации `roles/docker-compose_add/files/service_conf/logging/kibana/config/kibana.yml` указываются параметры подключения к **Elasticsearch**. Собирается контейнер **Kibana** с помощью *Dockerfile* `roles/docker-compose_add/files/service_conf/logging/Kibana/Dockerfile`. Особое внимание стоит обратить на параметр `server.basePath` - в нашем случае **Kibana** находится за обратным прокси и требуется указать новый URI.
-По умолчанию берется базовый официальный образ. При желании можно добавить нужные плагины. Подробнее о создании дашбордов можно узнать из [официальной документации][kibana-doc]
+По умолчанию берется базовый официальный образ. При желании можно добавить нужные плагины. Подробнее о создании дашбордов можно узнать из [официальной документации][kibana-doc].
 
 #### Rocketchat
 
@@ -377,8 +377,11 @@ Curator применяется для удаления индексов **Elasti
 
 ##### Cadvisor
 
-**Cadvisor** - система сбора метрик с запущенных контейнеров. Основные настройки представлены в файле `roles/docker-compose_add/templates/docker-compose.yml.j2`.
-Получает метрики контейнеров с хоста.
+**Cadvisor** - система сбора метрик с запущенных контейнеров. Основные настройки представлены в файле `rroles/docker-compose_add/templates/docker-compose.yml.j2`. Получает метрики контейнеров с хоста.
+
+##### Alertmanager
+
+**Alertmanager** - система распространения оповещений от **Prometheus** различными способами. В нашем случае настроено оповещения с помошью сообщений в **RocketChat**. Основные настройки представлены в файле `roles/docker-compose_add/files/service_conf/monitoring/alertmanager/config.yml`. D файле задаются интервал повтора сообщений и другие настройки оповещений, а также путь куда отправлять сообщений. Подробнее об интеграции **Alertmanager** и **Rocketchat** в [соответствующем разделе](#alertmanager-rocketchat). Подробнее о настройке **Alertmanager** можно узнать из [официальной документации][alertmanager-doc].
 
 ##### NodeExporter
 
@@ -437,9 +440,6 @@ Enter copied URL from RocketChat. Replace `https` with `http` and URL (`dep7serv
 
 * Create channel or user or use existing one in RocketChat. Create Incoming Webhook. Enter JS script [from this repos][chat-alertmngr]. In Alertmanager config in **receiver** section enter Webhook URL like in [Gitlab Intergration](#gitlab-rocketchat). Wait for incoming alertt. All message will be tranfered in internal wetwork. No TLS needed.
 
-
-ALERTMANAGER DOCS!!!!!!
-
 [linux-postinstall]: https://docs.docker.com/install/linux/linux-postinstall/
 [ansible-vault]:  https://docs.ansible.com/ansible/latest/user_guide/vault.html
 [netplan-config]: https://netplan.io/examples/
@@ -450,6 +450,7 @@ ALERTMANAGER DOCS!!!!!!
 [chat-doc]: https://docs.rocket.chat/?gclid=EAIaIQobChMIiNuQ8eaa7AIVCLLtCh3y8QhfEAAYASAAEgIGx_D_BwE
 [prometheus-doc]: https://prometheus.io/docs/introduction/overview/
 [grafana-doc]: https://grafana.com/grafana/
+[alertmanager-doc]: https://prometheus.io/docs/alerting/latest/configuration/
 [nginx-doc]: https://nginx.org/ru/docs/
 [gitlab-doc]: https://docs.gitlab.com/
 [chat-gitlab]: https://docs.rocket.chat/guides/administrator-guides/integrations/gitlab
